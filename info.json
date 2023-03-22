@@ -1,13 +1,14 @@
 {
-    "name": "DeadlockCrating",
-    "version": "1.7.0",
-    "title": "Deadlock's Crating Machine",
+    "name": "IntermodalContainers",
+    "version": "2.0.0",
+    "title": "Intermodal Containers",
     "author": "Deadlock989",
     "contact": "",
     "homepage": "https://forums.factorio.com/viewtopic.php?f=94&t=57070",
     "dependencies": [
         "base >= 1.1",
-        "?ReStack"
+        "? ReStack",
+        "! DeadlockCrating"
     ],
     "description": "Pack resources into crates and unpack them where needed. Hugely boosts belt throughput, at a cost.",
     "factorio_version": "1.1"

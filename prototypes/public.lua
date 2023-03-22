@@ -4,7 +4,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
-local DCM = require "prototypes.shared"
+local IC = require "prototypes.shared"
 deadlock_crating = {}
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -15,9 +15,9 @@ deadlock_crating = {}
 -- target_tech (string) - optional - name of the technology you want to add the crating unlocks to. If this is unspecified/nil, they won't be unlocked at all and you must handle the unlocks yourself
 -- Example: deadlock_crating.create("nuclear-laser-bomb", "deadlock-crating-3", 64)
 function deadlock_crating.add_crate(item_name, target_tech)
-	if not item_name then error("DCM: add_crate() given nil item name") end
-	DCM.generate_crates(item_name)
-	if target_tech then DCM.add_crates_to_tech(item_name, target_tech) end
+	if not item_name then error("IC: add_crate() given nil item name") end
+	IC.generate_crates(item_name)
+	if target_tech then IC.add_crates_to_tech(item_name, target_tech) end
 end
 
 -- deadlock_crating.destroy_crate(item_name)
@@ -25,8 +25,8 @@ end
 -- item_name (string) - name of the item you no longer want to be crateable
 -- Example: deadlock_crating.destroy_crate("copper-cable")
 function deadlock_crating.destroy_crate(item_name)
-	if not item_name then error("DCM: destroy_crate() given nil item name") end
-	DCM.destroy_crate(item_name)
+	if not item_name then error("IC: destroy_crate() given nil item name") end
+	IC.destroy_crate(item_name)
 end
 
 -- deadlock_crating.destroy_vanilla_crates()
@@ -34,9 +34,9 @@ end
 -- This is the same as calling destroy_crate() on every vanilla item the mod crates up by default
 -- Example: deadlock_crating.destroy_vanilla_crates()
 function deadlock_crating.destroy_vanilla_crates()
-	for _,tier in pairs(DCM.VANILLA_ITEM_TIERS) do
+	for _,tier in pairs(IC.VANILLA_ITEM_TIERS) do
 		for _,item_name in pairs(tier) do
-			DCM.destroy_crate(item_name)
+			IC.destroy_crate(item_name)
 		end
 	end
 end
@@ -58,72 +58,72 @@ end
 -- .health (integer) - mandatory if tier is not a number, otherwise optional - the max health of the machine. Defaults to vanilla tier scheme if not specified for numbered tiers. 
 -- The resulting machine item, recipe and entity will be named deadlock-crating-machine-N where N = tier. The technology is named deadlock-crating-N.
 function deadlock_crating.add_tier(parameters)
-	if not parameters.tier then error("DCM: create_tier(): tier not specified") end
-	if not parameters.ingredients then error("DCM: create_tier(): ingredients not specified") end
-	if not parameters.speed and type(parameters.tier) ~= "number" then error("DCM: create_tier(): speed not specified for non-numeric tier") end
-	if not parameters.energy and type(parameters.tier) ~= "number" then error("DCM: create_tier(): energy not specified for non-numeric tier") end
-	if not parameters.drain and type(parameters.tier) ~= "number" then error("DCM: create_tier(): drain not specified for non-numeric tier") end
-	if not parameters.unit and (type(parameters.tier) ~= "number" or parameters.tier < 1 or parameters.tier > DCM.TIERS) then error("DCM: create_tier(): unit not specified for non-numeric or non-vanilla tier") end
-	if not parameters.health and type(parameters.tier) ~= "number" then error("DCM: create_tier(): health not specified for non-numeric tier") end
-	if type(parameters.tier) ~= "string" and type(parameters.tier) ~= "number" then error("DCM: create_tier(): tier given as non-number and non-string") end
-	if type(parameters.ingredients) ~= "table" then error("DCM: create_tier(): ingredients given as non-table") end
-	if parameters.colour and type(parameters.colour) ~= "table" then error("DCM: create_tier(): colour given as non-table") end
-	if parameters.upgrade and type(parameters.upgrade) ~= "string" then error("DCM: create_tier(): upgrade given as non-string") end
-	if parameters.pollution and type(parameters.pollution) ~= "number" then error("DCM: create_tier(): pollution given as non-number") end
-	if parameters.energy and type(parameters.energy) ~= "string" then error("DCM: create_tier(): energy given as non-string") end
-	if parameters.drain and type(parameters.drain) ~= "string" then error("DCM: create_tier(): energy given as non-string") end
-	if parameters.prerequisites and type(parameters.prerequisites) ~= "table" then error("DCM: create_tier(): prerequisites given as non-table") end
-	if parameters.unit and type(parameters.unit) ~= "table" then error("DCM: create_tier(): unit given as non-table") end
-	if parameters.health and type(parameters.health) ~= "number" then error("DCM: create_tier(): health given as non-number") end
-	DCM.create_machine_item(parameters.tier, parameters.colour)
-	DCM.create_machine_recipe(parameters.tier, parameters.ingredients)
-	DCM.create_machine_entity(parameters.tier, parameters.colour, parameters.speed, parameters.pollution, parameters.energy, parameters.drain, parameters.upgrade, parameters.health)
-	DCM.create_crating_technology(parameters.tier, parameters.colour, parameters.prerequisites, parameters.unit)
+	if not parameters.tier then error("IC: create_tier(): tier not specified") end
+	if not parameters.ingredients then error("IC: create_tier(): ingredients not specified") end
+	if not parameters.speed and type(parameters.tier) ~= "number" then error("IC: create_tier(): speed not specified for non-numeric tier") end
+	if not parameters.energy and type(parameters.tier) ~= "number" then error("IC: create_tier(): energy not specified for non-numeric tier") end
+	if not parameters.drain and type(parameters.tier) ~= "number" then error("IC: create_tier(): drain not specified for non-numeric tier") end
+	if not parameters.unit and (type(parameters.tier) ~= "number" or parameters.tier < 1 or parameters.tier > IC.TIERS) then error("IC: create_tier(): unit not specified for non-numeric or non-vanilla tier") end
+	if not parameters.health and type(parameters.tier) ~= "number" then error("IC: create_tier(): health not specified for non-numeric tier") end
+	if type(parameters.tier) ~= "string" and type(parameters.tier) ~= "number" then error("IC: create_tier(): tier given as non-number and non-string") end
+	if type(parameters.ingredients) ~= "table" then error("IC: create_tier(): ingredients given as non-table") end
+	if parameters.colour and type(parameters.colour) ~= "table" then error("IC: create_tier(): colour given as non-table") end
+	if parameters.upgrade and type(parameters.upgrade) ~= "string" then error("IC: create_tier(): upgrade given as non-string") end
+	if parameters.pollution and type(parameters.pollution) ~= "number" then error("IC: create_tier(): pollution given as non-number") end
+	if parameters.energy and type(parameters.energy) ~= "string" then error("IC: create_tier(): energy given as non-string") end
+	if parameters.drain and type(parameters.drain) ~= "string" then error("IC: create_tier(): energy given as non-string") end
+	if parameters.prerequisites and type(parameters.prerequisites) ~= "table" then error("IC: create_tier(): prerequisites given as non-table") end
+	if parameters.unit and type(parameters.unit) ~= "table" then error("IC: create_tier(): unit given as non-table") end
+	if parameters.health and type(parameters.health) ~= "number" then error("IC: create_tier(): health given as non-number") end
+	IC.create_machine_item(parameters.tier, parameters.colour)
+	IC.create_machine_recipe(parameters.tier, parameters.ingredients)
+	IC.create_machine_entity(parameters.tier, parameters.colour, parameters.speed, parameters.pollution, parameters.energy, parameters.drain, parameters.upgrade, parameters.health)
+	IC.create_crating_technology(parameters.tier, parameters.colour, parameters.prerequisites, parameters.unit)
 end
 
--- removes recipe unlocks for a specified item from all DCM native tiers 1-3
+-- removes recipe unlocks for a specified item from all IC native tiers 1-3
 -- does not clean up items and recipes, just disassociates them from technologies
 -- DEPRECATED
 function deadlock_crating.remove(item_name)
-	log("DCM: deadlock_crating.remove("..item_name..") - this function is deprecated, consider using deadlock_crating.destroy_crate() instead")
-    for i=1,DCM.TIERS do
-        local e = data.raw.technology[DCM.TECH_PREFIX..i].effects
-        if e then 
-            local j = 2
-            while e[j] do
-                if e[j].type == "unlock-recipe" and string.find(e[j].recipe, item_name, 1, true) then
-                    DCM.debug("DCM: Recipe "..e[j].recipe.." cleared.")
-                    table.remove(e,j)
-                else
-                    j = j + 1
-                end
-            end
+	log("IC: deadlock_crating.remove("..item_name..") - this function is deprecated, consider using deadlock_crating.destroy_crate() instead")
+  for i=1,IC.TIERS do
+    local e = data.raw.technology[IC.TECH_PREFIX..i].effects
+    if e then 
+      local j = 2
+      while e[j] do
+        if e[j].type == "unlock-recipe" and string.find(e[j].recipe, item_name, 1, true) then
+          IC.debug("IC: Recipe "..e[j].recipe.." cleared.")
+          table.remove(e,j)
+        else
+          j = j + 1
         end
+      end
     end
+  end
 end
 
 -- removes all but the first unlock (supposedly the machine) from all native tech tiers 1-3
 -- does not clean up items and recipes, just disassociates them from technologies
 -- DEPRECATED
 function deadlock_crating.reset()
-	log("DCM: deadlock_crating.reset() - this function is deprecated, consider using deadlock_crating.destroy_vanilla_crates() instead")
-    for i=1,DCM.TIERS do
-        local e = data.raw.technology[DCM.TECH_PREFIX..i].effects
-        if e then 
-            while e[2] do table.remove(e,2) end
-        end
+	log("IC: deadlock_crating.reset() - this function is deprecated, consider using deadlock_crating.destroy_vanilla_crates() instead")
+  for i=1,IC.TIERS do
+    local e = data.raw.technology[IC.TECH_PREFIX..i].effects
+    if e then 
+      while e[2] do table.remove(e,2) end
     end
-    DCM.debug("DCM: reset() - all vanilla crates removed from tech unlocks.")
+  end
+  IC.debug("IC: reset() - all vanilla crates removed from tech unlocks.")
 end
 
 -- deadlock_crating.create()
 -- Creates a new crated version of a specified item
 -- DEPRECATED
 function deadlock_crating.create(item_name, target_tech, icon_size)
-	log("DCM: deadlock_crating.create("..item_name..") - this function is deprecated, consider using deadlock_crating.add_crate() instead")
-	if not item_name then error("DCM: create() given nil item name") end
+	log("IC: deadlock_crating.create("..item_name..") - this function is deprecated, consider using deadlock_crating.add_crate() instead")
+	if not item_name then error("IC: create() given nil item name") end
 	if not icon_size then icon_size = 32 end
-	DCM.generate_crates(item_name, icon_size)
-	if target_tech then DCM.add_crates_to_tech(item_name, target_tech) end
+	IC.generate_crates(item_name, icon_size)
+	if target_tech then IC.add_crates_to_tech(item_name, target_tech) end
 end
 
