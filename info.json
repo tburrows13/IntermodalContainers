@@ -4,12 +4,13 @@
     "title": "Intermodal Containers",
     "author": "Deadlock989",
     "contact": "",
-    "homepage": "https://forums.factorio.com/viewtopic.php?f=94&t=57070",
+    "homepage": "https://mods.factorio.com/mod/IntermodalContainers",
+    "source": "https://github.com/tburrows13/IntermodalContainers",
     "dependencies": [
         "base >= 1.1",
         "? ReStack",
         "! DeadlockCrating"
     ],
-    "description": "Pack resources into crates and unpack them where needed. Hugely boosts belt throughput, at a cost.",
+    "description": "Fork from DeadlockCratingMachine mod",
     "factorio_version": "1.1"
 }
