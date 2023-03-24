@@ -32,7 +32,11 @@ IC.CRATE_STACK_SIZE = 1
 IC.VANILLA_ITEM_TIERS = {
   [1] = { "wood", "iron-ore", "copper-ore", "stone", "coal", "iron-plate", "copper-plate", "steel-plate", "stone-brick" },
   [2] = { "copper-cable", "iron-gear-wheel", "iron-stick", "sulfur", "plastic-bar", "solid-fuel", "electronic-circuit", "advanced-circuit" },
-  [3] = { "processing-unit", "battery", "uranium-ore", "uranium-235", "uranium-238" },
+  [3] = { "processing-unit", "battery", "uranium-ore", "uranium-235", "uranium-238", 
+  -- -- additional items, for testing
+  -- "empty-barrel", "engine-unit", "electric-engine-unit", "explosives", "flying-robot-frame",
+  -- "rocket-control-unit", "low-density-structure", "rocket-fuel", "nuclear-fuel",
+  -- "automation-science-pack", "logistic-science-pack", "military-science-pack", "chemical-science-pack", "production-science-pack", "utility-science-pack", "space-science-pack" },
 }
 
 -- machine colours
@@ -44,7 +48,7 @@ IC.TIER_COLOURS = {
 IC.DEFAULT_COLOUR = {r=1.0, g=0.75, b=0.75}
 
 -- prefixes
-IC.MOD_PREFIX  = "ic-"
+IC.MOD_PREFIX    = "ic-"
 IC.ITEM_PREFIX   = IC.MOD_PREFIX.."container-"
 IC.LOAD_PREFIX   = IC.MOD_PREFIX.."load-"
 IC.UNLOAD_PREFIX = IC.MOD_PREFIX.."unload-"
@@ -76,14 +80,14 @@ IC.ITEM_TYPES = {
 }
 
 IC.ICONS = {
-  ["LOAD_BG"]  = { icon = IC.P_G_ICONS.."container/load-background.png",    icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
+  ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
   ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["ARROW_DOWN"] = { icon = IC.P_G_ICONS.."arrow/arrow.png",            icon_mipmaps = 1, icon_size = 64, scale = 0.4, shift = { 4, 1 } },
-  ["UNLOAD_BG"]  = { icon = IC.P_G_ICONS.."container/unload-background.png",    icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
+  ["ARROW_DOWN"] = { icon = IC.P_G_ICONS.."arrow/arrow.png",                      icon_mipmaps = 1, icon_size = 64, scale = 0.4, shift = { 4, 1 } },
+  ["UNLOAD_BG"]  = { icon = IC.P_G_ICONS.."container/unload-background.png",      icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
   ["CORNER_L"]   = { icon = IC.P_G_ICONS.."container/container-corner-left.png",  icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["ARROW_UP"]   = { icon = IC.P_G_ICONS.."arrow/arrow-up.png",           icon_mipmaps = 1, icon_size = 64, scale = 0.4, shift = { -4, 0} },
-  ["CONTAINER"]  = { icon = IC.P_G_ICONS.."container/container.png",        icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["TOP_COVER"]  = { icon = IC.P_G_ICONS.."container/container-top.png",      icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
+  ["ARROW_UP"]   = { icon = IC.P_G_ICONS.."arrow/arrow-up.png",                   icon_mipmaps = 1, icon_size = 64, scale = 0.4, shift = { -4, 0} },
+  ["CONTAINER"]  = { icon = IC.P_G_ICONS.."container/container.png",              icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
+  ["TOP_COVER"]  = { icon = IC.P_G_ICONS.."container/container-top.png",          icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
 }
 
 -- debug logging
@@ -185,6 +189,17 @@ function IC.generate_crates(this_item, icon_size)
   shift_icon(containeritemicons[2], 0, -10)
   shift_icon(containeritemicons[3], 0, -4.5)
   shift_icon(containeritemicons[4], 0, 1)
+  local containeritemlayers = table.deepcopy(containeritemicons)
+  for _, layer in pairs(containeritemlayers) do
+    layer.filename = layer.icon
+    layer.icon = nil
+    layer.size = layer.icon_size
+    layer.icon_size = nil
+    layer.mipmap_count = layer.icon_mipmaps
+    layer.icon_mipmaps = nil
+    layer.shift = layer.shift or {0, 0}
+    layer.shift = util.by_pixel(layer.shift[1], layer.shift[2])
+  end
   local loadrecipeicons = {
     table.deepcopy(IC.ICONS.LOAD_BG),
     table.deepcopy(IC.ICONS.CORNER_R),
@@ -202,7 +217,6 @@ function IC.generate_crates(this_item, icon_size)
   scale_icon(unloadrecipeicons[3], 0.36)
   shift_icon(unloadrecipeicons[3], 4.5, -4.5)
 
-  -- the item
   data:extend({
     -- the item
     {
@@ -214,9 +228,10 @@ function IC.generate_crates(this_item, icon_size)
       subgroup = IC.LOAD_PREFIX .. base_item.subgroup,
       allow_decomposition = false,
       icons = containeritemicons,
+      pictures = { layers = containeritemlayers },
       flags = {},
     },
-    -- The packing recipe
+    -- The load recipe
     {
       type = "recipe",
       name = IC.LOAD_PREFIX .. this_item,
@@ -238,7 +253,7 @@ function IC.generate_crates(this_item, icon_size)
       hide_from_stats = true,
       hide_from_player_crafting = true,
     },
-    -- The unpacking recipe
+    -- The unload recipe
     {
       type = "recipe",
       name = IC.UNLOAD_PREFIX .. this_item,
@@ -267,14 +282,14 @@ function IC.generate_crates(this_item, icon_size)
   if not subgroup_exists(IC.LOAD_PREFIX .. base_item.subgroup) then
     data:extend{
       {
-        type = "item-subgroup",
-        name = IC.LOAD_PREFIX .. base_item.subgroup,
+        type  = "item-subgroup",
+        name  = IC.LOAD_PREFIX .. base_item.subgroup,
         group = IC.LOAD_PREFIX .. "container",
         order = "a[load]-" .. (base_item.order or "unordered"),
       },
       {
-        type = "item-subgroup",
-        name = IC.UNLOAD_PREFIX .. base_item.subgroup,
+        type  = "item-subgroup",
+        name  = IC.UNLOAD_PREFIX .. base_item.subgroup,
         group = IC.UNLOAD_PREFIX .. "container",
         order = "b[unload]-" .. (base_item.order or "unordered"),
       }

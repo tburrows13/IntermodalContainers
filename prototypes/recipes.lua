@@ -77,14 +77,14 @@ for name, subgroup in pairs(data.raw["item-subgroup"]) do
   if subgroup.group == "intermediate-products" then
     data:extend{
       {
-        type = "item-subgroup",
-        name = IC.LOAD_PREFIX .. name,
+        type  = "item-subgroup",
+        name  = IC.LOAD_PREFIX .. name,
         group = IC.LOAD_PREFIX .. "container",
         order = "a[load]-" .. (subgroup.order or "unordered"),
       },
       {
-        type = "item-subgroup",
-        name = IC.UNLOAD_PREFIX .. name,
+        type  = "item-subgroup",
+        name  = IC.UNLOAD_PREFIX .. name,
         group = IC.UNLOAD_PREFIX .. "container",
         order = "b[unload]-" .. (subgroup.order or "unordered"),
       }

@@ -15,7 +15,7 @@ data:extend{
   order = "[first-in-order]",
   stack_size = 10,
   pictures = 
-  {  -- Oversized on oversized on belts and ground 
+  {  -- Oversized on belts and ground 
     {
     filename = IC.P_G_ICONS .. "container/container.png",
     size = 64,
