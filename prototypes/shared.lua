@@ -159,66 +159,92 @@ local function subgroup_exists(subgroup)
   return false
 end
 
+-- @ tech_name: String
+-- @ ancestor: String
+function is_descendant_of(tech_name, ancestor)
+  if tech_name == ancestor then return true end
+  local technology = data.raw.technology[tech_name]
+  if technology.prerequisites == nil then
+    return false
+  end
+  for ___, name in pairs(technology.prerequisites) do
+    if name == ancestor then
+      return true
+    end
+    if is_descendant_of(name, ancestor) then
+      return true
+    end
+  end
+  return false
+end
+
 -- return recipe's name given the item's name
 -- default: "ic-container"
 -- @ item_name: String
 local function get_recipe_from_item(item_name)
   local default_recipe = IC.MOD_PREFIX.."container"
+  local recipes = {}
   for ___, recipe in pairs(data.raw.recipe) do
+    local flag = false
     -- recipe
-    if recipe.result and recipe.result == item_name then return recipe.name end
-    if recipe.results then
+    if recipe.result and recipe.result == item_name then flag = true end
+    if not flag and recipe.results then
       for ___, result in pairs(recipe.results) do
-        if result.name and result.name == item_name then return recipe.name end
-        if result[1] and result[1] == item_name then return recipe.name end
+        if result.name and result.name == item_name then flag = true end
+        if result[1] and result[1] == item_name then flag = true end
       end
     end
     -- recipe.normal
-    if recipe.normal then
-      if recipe.normal.result and recipe.normal.result == item_name then return recipe.name end
+    if not flag and recipe.normal then
+      if recipe.normal.result and recipe.normal.result == item_name then flag = true end
       if recipe.normal.results then
         for ___, result in pairs(recipe.normal.results) do
-          if result.name and result.name == item_name then return recipe.name end
-          if result[1] and result[1] == item_name then return recipe.name end
+          if result.name and result.name == item_name then flag = true end
+          if result[1] and result[1] == item_name then flag = true end
         end
       end
     end
     -- recipe.expensive
-    if recipe.expensive then
-      if recipe.expensive.result and recipe.expensive.result == item_name then return recipe.name end
+    if not flag and recipe.expensive then
+      if recipe.expensive.result and recipe.expensive.result == item_name then flag = true end
       if recipe.expensive.results then
         for ___, result in pairs(recipe.expensive.results) do
-          if result.name and result.name == item_name then return recipe.name end
-          if result[1] and result[1] == item_name then return recipe.name end
+          if result.name and result.name == item_name then flag = true end
+          if result[1] and result[1] == item_name then flag = true end
         end
       end
     end
+    if flag then table.insert(recipes, recipe.name) end
   end
-  return default_recipe
+  if #recipes > 0 then return recipes end
+  return { default_recipe }
 end
 
 -- return the name of the technology that unlocks the given recipe
 -- default: nil, if not found
 -- @ recipe_name: String
 local function get_technology_from_recipe(recipe_name)
+  local technologies = {}
   for ___, tech in pairs(data.raw.technology) do
+    local flag = false
     if tech.effects then
       for ___, effect in pairs(tech.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then return tech.name end
+        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true break end
       end
     end
-    if tech.normal and tech.normal.effects then
+    if not flag and tech.normal and tech.normal.effects then
       for ___, effect in pairs(tech.normal.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then return tech.name end
+        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true break end
       end
     end
-    if tech.expensive and tech.expensive.effects then
+    if not flag and tech.expensive and tech.expensive.effects then
       for ___, effect in pairs(tech.expensive.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then return tech.name end
+        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true break end
       end
     end
+    if flag then table.insert(technologies, tech.name) end
   end
-  return nil
+  return technologies
 end
 
 -- return technology's name given the item's name
@@ -231,9 +257,33 @@ function IC.get_technology_from_item(item_name)
     log("ERROR: IC asked to crate an item that doesn't exist ("..item_name..")")
     return default_technology
   end
-  local recipe_name = get_recipe_from_item(item_name)
-  local technology_name = get_technology_from_recipe(recipe_name)
-  return technology_name or default_technology
+  local recipe_names = get_recipe_from_item(item_name)
+  local technology_names = {}
+  for ___, recipe_name in pairs(recipe_names) do
+    local tech_names = get_technology_from_recipe(recipe_name)
+    for ___, tech_name in pairs(tech_names) do
+      table.insert(technology_names, tech_name)
+    end
+  end
+
+  if #technology_names == 0 then return default_technology end
+  if #technology_names == 1 then return technology_names[1] end
+
+  local origin = {}
+  for ___, tech in pairs(technology_names) do
+    local descendant = false
+    for ___, test in pairs(technology_names) do
+      if tech ~= test then
+        descendant = descendant or is_descendant_of(tech, test)
+      end
+    end
+    if not descendant then 
+      table.insert(origin, tech)
+    end
+  end
+  if #origin == 1 then return origin[1] end
+  log("WARNING IC: could not decide correct technology for: "..item_name..", default to: "..default_technology)
+  return default_technology
 end
 
 -- generate items and recipes for crated items
