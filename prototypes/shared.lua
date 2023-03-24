@@ -36,7 +36,8 @@ IC.VANILLA_ITEM_TIERS = {
   -- -- additional items, for testing
   -- "empty-barrel", "engine-unit", "electric-engine-unit", "explosives", "flying-robot-frame",
   -- "rocket-control-unit", "low-density-structure", "rocket-fuel", "nuclear-fuel",
-  -- "automation-science-pack", "logistic-science-pack", "military-science-pack", "chemical-science-pack", "production-science-pack", "utility-science-pack", "space-science-pack" },
+  -- "automation-science-pack", "logistic-science-pack", "military-science-pack", "chemical-science-pack", "production-science-pack", "utility-science-pack", "space-science-pack"
+  },
 }
 
 -- machine colours
@@ -91,11 +92,13 @@ IC.ICONS = {
 }
 
 -- debug logging
+-- @ message: String
 function IC.debug(message)
   if IC.LOGGING then log(message) end
 end
 
--- get item prototye
+-- get ItemPrototype from item name
+-- @ item_name: String
 local function get_item_prototype(item_name)
   for _, item_type in pairs(IC.ITEM_TYPES) do
     if data.raw[item_type][item_name] then 
@@ -105,18 +108,24 @@ local function get_item_prototype(item_name)
   return nil
 end
 
--- shift icon by X, Y
+-- shift icIconSpecification on by (X, Y)
+-- @ icon: IconSpecification
+-- @ x: Number
+-- @ y: Number
 local function shift_icon(icon, x, y)
   icon.shift = icon.shift or {0, 0}
   icon.shift = {icon.shift[1] + x, icon.shift[2] + y}
 end
 
--- scale icon by value
+-- scale IconSpecification by value
+-- @ icon: IconSpecification
+-- @ scale: Number
 local function scale_icon(icon, scale)
   icon.scale = (icon.scale or 1) * scale
 end
 
--- return item icon(s)
+-- return item icon(s): IconSpecification(s)
+-- @ item: ItemPrototype
 local function get_item_icon(item)
   -- Icons has priority over icon, check for icons definition first
   local icons = {}
@@ -141,12 +150,90 @@ local function get_item_icon(item)
   return icons
 end
 
--- returns bool
+-- returns whether a subgroup exists or not: Bool
+-- @ subgroup: String
 local function subgroup_exists(subgroup)
   for _, sg in pairs(data.raw["item-subgroup"]) do
     if sg.name == subgroup then return true end
   end
   return false
+end
+
+-- return recipe's name given the item's name
+-- default: "ic-container"
+-- @ item_name: String
+local function get_recipe_from_item(item_name)
+  local default_recipe = IC.MOD_PREFIX.."container"
+  for ___, recipe in pairs(data.raw.recipe) do
+    -- recipe
+    if recipe.result and recipe.result == item_name then return recipe.name end
+    if recipe.results then
+      for ___, result in pairs(recipe.results) do
+        if result.name and result.name == item_name then return recipe.name end
+        if result[1] and result[1] == item_name then return recipe.name end
+      end
+    end
+    -- recipe.normal
+    if recipe.normal then
+      if recipe.normal.result and recipe.normal.result == item_name then return recipe.name end
+      if recipe.normal.results then
+        for ___, result in pairs(recipe.normal.results) do
+          if result.name and result.name == item_name then return recipe.name end
+          if result[1] and result[1] == item_name then return recipe.name end
+        end
+      end
+    end
+    -- recipe.expensive
+    if recipe.expensive then
+      if recipe.expensive.result and recipe.expensive.result == item_name then return recipe.name end
+      if recipe.expensive.results then
+        for ___, result in pairs(recipe.expensive.results) do
+          if result.name and result.name == item_name then return recipe.name end
+          if result[1] and result[1] == item_name then return recipe.name end
+        end
+      end
+    end
+  end
+  return default_recipe
+end
+
+-- return the name of the technology that unlocks the given recipe
+-- default: nil, if not found
+-- @ recipe_name: String
+local function get_technology_from_recipe(recipe_name)
+  for ___, tech in pairs(data.raw.technology) do
+    if tech.effects then
+      for ___, effect in pairs(tech.effects) do
+        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then return tech.name end
+      end
+    end
+    if tech.normal and tech.normal.effects then
+      for ___, effect in pairs(tech.normal.effects) do
+        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then return tech.name end
+      end
+    end
+    if tech.expensive and tech.expensive.effects then
+      for ___, effect in pairs(tech.expensive.effects) do
+        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then return tech.name end
+      end
+    end
+  end
+  return nil
+end
+
+-- return technology's name given the item's name
+-- default: "ic-containerization-1"
+-- @ item_name: String
+function IC.get_technology_from_item(item_name)
+  local default_technology = IC.TECH_PREFIX.."1"
+  local base_item = get_item_prototype(item_name)
+  if not base_item then
+    log("ERROR: IC asked to crate an item that doesn't exist ("..item_name..")")
+    return default_technology
+  end
+  local recipe_name = get_recipe_from_item(item_name)
+  local technology_name = get_technology_from_recipe(recipe_name)
+  return technology_name or default_technology
 end
 
 -- generate items and recipes for crated items

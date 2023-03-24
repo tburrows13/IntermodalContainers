@@ -13,11 +13,27 @@ deadlock_crating = {}
 -- Creates a new crated version of a specified item
 -- item_name (string) - mandatory - name of the item prototype you want to be put into crates
 -- target_tech (string) - optional - name of the technology you want to add the crating unlocks to. If this is unspecified/nil, they won't be unlocked at all and you must handle the unlocks yourself
--- Example: deadlock_crating.create("nuclear-laser-bomb", "deadlock-crating-3", 64)
+-- Example: deadlock_crating.add_create("nuclear-laser-bomb", "deadlock-crating-3")
 function deadlock_crating.add_crate(item_name, target_tech)
 	if not item_name then error("IC: add_crate() given nil item name") end
 	IC.generate_crates(item_name)
 	if target_tech then IC.add_crates_to_tech(item_name, target_tech) end
+end
+
+-- deadlock_crating.add_crate_autotech()
+-- Creates a new crated version of a specified item
+-- item_name (string) - mandatory - name of the item prototype you want to be put into crates
+-- target_tech (string) - optional - name of the technology you want to add the crating unlocks to. If this is unspecified/nil, it will be assigned to the technology that unlocks the item, if none, will be unlocked by the 1st containerization technology.
+-- If multiple recipes are present at different technologies, consider passing a defined "target_tech" param or using deadlock_crating.add_crate() function instead.
+-- Example: deadlock_crating.add_crate_autotech("nuclear-laser-bomb")
+-- Example: deadlock_crating.add_crate_autotech("nuclear-laser-bomb", nil)
+-- Example: deadlock_crating.add_crate_autotech("nuclear-laser-bomb", "deadlock-crating-3")
+function deadlock_crating.add_crate_autotech(item_name, target_tech)
+	if not item_name then error("IC: add_crate_autotech() given nil item name") end
+	if target_tech ~= nil then deadlock_crating.add_crate(item_name, target_tech) return end
+	local technology_name = IC.get_technology_from_item(item_name)
+	IC.generate_crates(item_name)
+	IC.add_crates_to_tech(item_name, technology_name)
 end
 
 -- deadlock_crating.destroy_crate(item_name)
