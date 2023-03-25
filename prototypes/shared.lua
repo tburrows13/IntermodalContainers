@@ -164,6 +164,7 @@ end
 function is_descendant_of(tech_name, ancestor)
   if tech_name == ancestor then return true end
   local technology = data.raw.technology[tech_name]
+  if not technology then return false end
   if technology.prerequisites == nil then
     return false
   end
@@ -869,6 +870,12 @@ function IC.create_crating_technology(tier, colour, prerequisites, unit)
       },
     }
   })
+end
+
+function IC.migrate_api(params)
+  if params.technology then
+    
+  end  
 end
 
 return IC
