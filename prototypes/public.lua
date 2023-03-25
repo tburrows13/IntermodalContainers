@@ -17,7 +17,7 @@ deadlock_crating = {}
 function deadlock_crating.add_crate(item_name, target_tech)
 	if not item_name then error("IC: add_crate() given nil item name") end
 	IC.generate_crates(item_name)
-	if target_tech then IC.add_crates_to_tech(item_name, target_tech) end
+	if target_tech then IC.add_crates_to_tech(item_name, IC.migrate_api({technology = target_tech})) end
 end
 
 -- deadlock_crating.add_crate_autotech()
