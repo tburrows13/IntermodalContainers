@@ -56,6 +56,7 @@
     ["deadlock-crate-ff-charged-battery-pack", "ic-container-ff-charged-battery-pack"]
   ],
   "recipe": [
+    ["ff-container", "ic-container"],
     ["deadlock-crating-machine-1", "ic-containerization-machine-1"],
     ["deadlock-crating-machine-2", "ic-containerization-machine-2"],
     ["deadlock-crating-machine-3", "ic-containerization-machine-3"],
