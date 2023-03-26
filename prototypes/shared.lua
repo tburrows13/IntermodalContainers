@@ -443,6 +443,7 @@ function IC.add_crates_to_tech(item_name, target_technology)
     IC.debug("IC: Skipping technology insert, no tech specified ("..item_name..")")
     return
   end
+  target_technology = IC.migrate_api({technology = target_technology})
   if not data.raw.recipe[IC.UNLOAD_PREFIX..item_name] then
     log("ERROR: IC asked to use non-existent unloading recipe for tech ("..target_technology..")")
     return
@@ -848,6 +849,9 @@ function IC.create_crating_technology(tier, colour, prerequisites, unit)
     if tier < 1 or tier > IC.TIERS then error("IC: asked to create a technology outside of vanilla tier range, but research unit costs were not specified") end
     unit = table.deepcopy(data.raw.technology[IC.TECH_BASE[tier]].unit)
     unit.count = unit.count * 2
+  end
+  for _, prerequisite in pairs(prerequisites) do
+    prerequisite = IC.migrate_api({technology = prerequisite})
   end
   local order = type(tier) == "number" and string.format("%03d",tier) or tier
   data:extend({
