@@ -881,9 +881,9 @@ end
 -- @ [item]: String
 function IC.migrate_api(params)
   if params.technology then return params.technology:gsub("deadlock%-crating%-", IC.TECH_PREFIX) end
-  if params.machine then return params.technology:gsub("deadlock%-crating%-machine%-", IC.ENTITY_PREFIX) end
+  if params.machine then return params.machine:gsub("deadlock%-crating%-machine%-", IC.ENTITY_PREFIX) end
   if params.load then return params.load:gsub("deadlock%-packrecipe%-", IC.LOAD_PREFIX) end
-  if params.unload then return params.load:gsub("deadlock%-unpackrecipe%-", IC.UNLOAD_PREFIX) end
+  if params.unload then return params.unload:gsub("deadlock%-unpackrecipe%-", IC.UNLOAD_PREFIX) end
   if params.item then return params.item:gsub("deadlock%-crate%-", IC.ITEM_PREFIX) end
   log("IC: parameter not expected")
 end
