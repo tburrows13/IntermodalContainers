@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 24. 03. 2023
+  Info:
+    - Release v2.0.0 based on "DeadlockCrating" implementing new crating graphics and functions
+  Changes:
+    - Containers stack to 1 instead of 5
+    - Containers hold 20x item stacks
+    - New graphics for containers items and recipes
+    - Split tabs for loading/unloading
+    - Containers look oversized on surface
+  Features:
+    - API: "add_crate" can now create crates from any item-prototype
+    - API: "add_crate_autotech" does not need to specify the technology
+---------------------------------------------------------------------------------------------------
 Version: 1.7.0
 Date: 13. 12. 2020
   Changes:
