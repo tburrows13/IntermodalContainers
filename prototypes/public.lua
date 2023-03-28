@@ -16,6 +16,7 @@ deadlock_crating = {}
 -- Example: deadlock_crating.add_create("nuclear-laser-bomb", "deadlock-crating-3")
 function deadlock_crating.add_crate(item_name, target_tech)
 	if not item_name then error("IC: add_crate() given nil item name") end
+	if data.raw.item[IC.ITEM_PREFIX..item_name] then IC.destroy_crate(item_name) end
 	IC.generate_crates(item_name)
 	if target_tech then IC.add_crates_to_tech(item_name, target_tech) end
 end
@@ -30,6 +31,7 @@ end
 -- Example: deadlock_crating.add_crate_autotech("nuclear-laser-bomb", "deadlock-crating-3")
 function deadlock_crating.add_crate_autotech(item_name, target_tech)
 	if not item_name then error("IC: add_crate_autotech() given nil item name") end
+	if data.raw.item[IC.ITEM_PREFIX..item_name] then IC.destroy_crate(item_name) end
 	if target_tech ~= nil then deadlock_crating.add_crate(item_name, target_tech) return end
 	local technology_name = IC.get_technology_from_item(item_name)
 	IC.generate_crates(item_name)

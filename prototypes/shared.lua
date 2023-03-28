@@ -322,7 +322,7 @@ function IC.destroy_crate(base_item_name)
       local temp = {}
       local found = false
       for _,effect in pairs(tech.effects) do
-        if effect.type ~= "unlock-recipe" or not util.is_value_in_table(dead_recipes, effect.recipe) then
+        if effect.type ~= "unlock-recipe" or not utils.is_value_in_table(dead_recipes, effect.recipe) then
           table.insert(temp,effect)
         else found = true end
       end

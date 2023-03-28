@@ -377,6 +377,7 @@ return {
   uses_item_as_ingredient = uses_item_as_ingredient,
   uses_item_as_result = uses_item_as_result,
   brighter_colour = brighter_colour,
+  is_value_in_table = is_value_in_table,
   get_scale = get_scale,
   get_energy_table = get_energy_table,
   isaCircularDependency = isaCircularDependency
