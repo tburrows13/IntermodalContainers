@@ -1,3 +1,5 @@
+local utils = require "prototypes.utils"
+
 -- globals container
 local IC = {}
 
@@ -70,16 +72,6 @@ IC.TECH_BASE = {
   [3] = "inserter-capacity-bonus-5",
 }
 
--- list of base item prototypes to pick from
-IC.ITEM_TYPES = {
-  "item",
-  "ammo",
-  "capsule",
-  "module",
-  "tool",
-  "repair-tool",
-}
-
 IC.ICONS = {
   ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
   ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
@@ -97,194 +89,16 @@ function IC.debug(message)
   if IC.LOGGING then log(message) end
 end
 
--- get ItemPrototype from item name
--- @ item_name: String
-local function get_item_prototype(item_name)
-  for _, item_type in pairs(IC.ITEM_TYPES) do
-    if data.raw[item_type][item_name] then 
-      return data.raw[item_type][item_name]
-    end
-  end
-  return nil
-end
-
--- shift icIconSpecification on by (X, Y)
--- @ icon: IconSpecification
--- @ x: Number
--- @ y: Number
-local function shift_icon(icon, x, y)
-  icon.shift = icon.shift or {0, 0}
-  icon.shift = {icon.shift[1] + x, icon.shift[2] + y}
-end
-
--- scale IconSpecification by value
--- @ icon: IconSpecification
--- @ scale: Number
-local function scale_icon(icon, scale)
-  icon.scale = (icon.scale or 1) * scale
-end
-
--- return item icon(s): IconSpecification(s)
--- @ item: ItemPrototype
-local function get_item_icon(item)
-  -- Icons has priority over icon, check for icons definition first
-  local icons = {}
-  if item.icons then
-    for _,icon in pairs(item.icons) do
-      local temp_icon = table.deepcopy(icon)
-      temp_icon.scale = temp_icon.scale or 1
-      if not temp_icon.icon_size then temp_icon.icon_size = item.icon_size end
-      table.insert(icons, temp_icon)
-    end
-  -- If no icons field, look for icon definition
-  elseif item.icon then
-    table.insert(icons, {
-      icon = item.icon,
-      scale = 64 / item.icon_size, -- Base layer is 64 pixels, need to ensure scaling of the crated item is correct for its size
-      icon_size = item.icon_size,
-      icon_mipmaps = item.icon_mipmaps,
-    })
-  else
-    return nil
-  end
-  return icons
-end
-
--- returns whether a subgroup exists or not: Bool
--- @ subgroup: String
-local function subgroup_exists(subgroup)
-  for _, sg in pairs(data.raw["item-subgroup"]) do
-    if sg.name == subgroup then return true end
-  end
-  return false
-end
-
--- @ tech_name: String
--- @ ancestor: String
-function is_descendant_of(tech_name, ancestor)
-  if tech_name == ancestor then return true end
-  local technology = data.raw.technology[tech_name]
-  if not technology then return false end
-  if technology.prerequisites == nil then
-    return false
-  end
-  for ___, name in pairs(technology.prerequisites) do
-    if name == ancestor then
-      return true
-    end
-    if is_descendant_of(name, ancestor) then
-      return true
-    end
-  end
-  return false
-end
-
--- return recipe's name given the item's name
--- default: "ic-container"
--- @ item_name: String
-local function get_recipe_from_item(item_name)
-  local default_recipe = IC.MOD_PREFIX.."container"
-  local recipes = {}
-  for ___, recipe in pairs(data.raw.recipe) do
-    local flag = false
-    -- recipe
-    if recipe.result and recipe.result == item_name then flag = true end
-    if not flag and recipe.results then
-      for ___, result in pairs(recipe.results) do
-        if result.name and result.name == item_name then flag = true end
-        if result[1] and result[1] == item_name then flag = true end
-      end
-    end
-    -- recipe.normal
-    if not flag and recipe.normal then
-      if recipe.normal.result and recipe.normal.result == item_name then flag = true end
-      if recipe.normal.results then
-        for ___, result in pairs(recipe.normal.results) do
-          if result.name and result.name == item_name then flag = true end
-          if result[1] and result[1] == item_name then flag = true end
-        end
-      end
-    end
-    -- recipe.expensive
-    if not flag and recipe.expensive then
-      if recipe.expensive.result and recipe.expensive.result == item_name then flag = true end
-      if recipe.expensive.results then
-        for ___, result in pairs(recipe.expensive.results) do
-          if result.name and result.name == item_name then flag = true end
-          if result[1] and result[1] == item_name then flag = true end
-        end
-      end
-    end
-    if flag then table.insert(recipes, recipe.name) end
-  end
-  if #recipes > 0 then return recipes end
-  return { default_recipe }
-end
-
--- return the name of the technology that unlocks the given recipe
--- default: nil, if not found
--- @ recipe_name: String
-local function get_technology_from_recipe(recipe_name)
-  local technologies = {}
-  for ___, tech in pairs(data.raw.technology) do
-    local flag = false
-    if tech.effects then
-      for ___, effect in pairs(tech.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true break end
-      end
-    end
-    if not flag and tech.normal and tech.normal.effects then
-      for ___, effect in pairs(tech.normal.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true break end
-      end
-    end
-    if not flag and tech.expensive and tech.expensive.effects then
-      for ___, effect in pairs(tech.expensive.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true break end
-      end
-    end
-    if flag then table.insert(technologies, tech.name) end
-  end
-  return technologies
-end
-
 -- return technology's name given the item's name
 -- default: "ic-containerization-1"
 -- @ item_name: String
 function IC.get_technology_from_item(item_name)
-  local default_technology = IC.TECH_PREFIX.."1"
-  local base_item = get_item_prototype(item_name)
-  if not base_item then
-    log("ERROR: IC asked to crate an item that doesn't exist ("..item_name..")")
-    return default_technology
+  local default_tech = IC.TECH_PREFIX.."1"
+  local proposed_tech = utils.get_technology_from_item(item_name)
+  if proposed_tech and (not utils.is_descendant_of(default_tech, proposed_tech)) then 
+    return proposed_tech 
   end
-  local recipe_names = get_recipe_from_item(item_name)
-  local technology_names = {}
-  for ___, recipe_name in pairs(recipe_names) do
-    local tech_names = get_technology_from_recipe(recipe_name)
-    for ___, tech_name in pairs(tech_names) do
-      table.insert(technology_names, tech_name)
-    end
-  end
-
-  if #technology_names == 0 then return default_technology end
-  if #technology_names == 1 then return technology_names[1] end
-
-  local origin = {}
-  for ___, tech in pairs(technology_names) do
-    local descendant = false
-    for ___, test in pairs(technology_names) do
-      if tech ~= test then
-        descendant = descendant or is_descendant_of(tech, test)
-      end
-    end
-    if not descendant then 
-      table.insert(origin, tech)
-    end
-  end
-  if #origin == 1 then return origin[1] end
-  log("WARNING IC: could not decide correct technology for: "..item_name..", default to: "..default_technology)
-  return default_technology
+  return default_tech
 end
 
 -- generate items and recipes for crated items
@@ -297,7 +111,7 @@ function IC.generate_crates(this_item, icon_size)
     end
   else icon_size = IC.ITEM_ICON_SIZE end
   -- The crated item
-  local base_item = get_item_prototype(this_item)
+  local base_item = utils.get_item_prototype(this_item)
   if not base_item then
     log("ERROR: IC asked to crate an item that doesn't exist ("..this_item..")")
     return
@@ -308,7 +122,7 @@ function IC.generate_crates(this_item, icon_size)
     log("ABORT: IC encountered a recipe with insane stack size ("..this_item..")")
     return
   end
-  local icons = get_item_icon(base_item)
+  local icons = utils.get_item_icon(base_item)
   if not icons then 
     log("ERROR: IC asked to crate an item with no icon or icons properties ("..this_item..")")
     return
@@ -321,12 +135,12 @@ function IC.generate_crates(this_item, icon_size)
     table.deepcopy(icons[1]),
     table.deepcopy(IC.ICONS.TOP_COVER),
   }
-  scale_icon(containeritemicons[2], 0.3)
-  scale_icon(containeritemicons[3], 0.3)
-  scale_icon(containeritemicons[4], 0.3)
-  shift_icon(containeritemicons[2], 0, -10)
-  shift_icon(containeritemicons[3], 0, -4.5)
-  shift_icon(containeritemicons[4], 0, 1)
+  utils.scale_icon(containeritemicons[2], 0.3)
+  utils.scale_icon(containeritemicons[3], 0.3)
+  utils.scale_icon(containeritemicons[4], 0.3)
+  utils.shift_icon(containeritemicons[2], 0, -10)
+  utils.shift_icon(containeritemicons[3], 0, -4.5)
+  utils.shift_icon(containeritemicons[4], 0, 1)
   local containeritemlayers = table.deepcopy(containeritemicons)
   for _, layer in pairs(containeritemlayers) do
     layer.filename = layer.icon
@@ -344,16 +158,16 @@ function IC.generate_crates(this_item, icon_size)
     table.deepcopy(icons[1]),
     table.deepcopy(IC.ICONS.ARROW_DOWN),
   }
-  scale_icon(loadrecipeicons[3], 0.36)
-  shift_icon(loadrecipeicons[3], -4.5, -4.5)
+  utils.scale_icon(loadrecipeicons[3], 0.36)
+  utils.shift_icon(loadrecipeicons[3], -4.5, -4.5)
   local unloadrecipeicons = {
     table.deepcopy(IC.ICONS.UNLOAD_BG),
     table.deepcopy(IC.ICONS.CORNER_L),
     table.deepcopy(icons[1]),
     table.deepcopy(IC.ICONS.ARROW_UP),
   }
-  scale_icon(unloadrecipeicons[3], 0.36)
-  shift_icon(unloadrecipeicons[3], 4.5, -4.5)
+  utils.scale_icon(unloadrecipeicons[3], 0.36)
+  utils.shift_icon(unloadrecipeicons[3], 4.5, -4.5)
 
   data:extend({
     -- the item
@@ -417,7 +231,7 @@ function IC.generate_crates(this_item, icon_size)
     }
   })
   -- create subgroup
-  if not subgroup_exists(IC.LOAD_PREFIX .. base_item.subgroup) then
+  if not utils.subgroup_exists(IC.LOAD_PREFIX .. base_item.subgroup) then
     data:extend{
       {
         type  = "item-subgroup",
@@ -481,42 +295,6 @@ function IC.add_crates_to_tech(item_name, target_technology)
   IC.debug("IC: Modified technology: "..target_technology)
 end
 
--- does a table of IngredientPrototypes or ProductPrototypes contain reference to an item?
-local function product_prototype_uses_item(proto, item)
-  for _,p in pairs(proto) do
-    if p.name and p.name == item then return true
-    elseif p[1] == item then return true end
-  end
-  return false
-end
-
--- does a recipe reference an item in its ingredients?
-local function uses_item_as_ingredient(recipe, item)
-  if recipe.ingredients and product_prototype_uses_item(recipe.ingredients, item) then return true end
-  if recipe.normal and recipe.normal.ingredients and product_prototype_uses_item(recipe.normal.ingredients, item) then return true end
-  if recipe.expensive and recipe.expensive.ingredients and product_prototype_uses_item(recipe.expensive.ingredients, item) then return true end
-  return false
-end
-
--- does a recipe reference an item in its results?
-local function uses_item_as_result(recipe, item)
-  if recipe.result == item then return true end
-  if recipe.normal and recipe.normal.result == item then return true end
-  if recipe.expensive and recipe.expensive.result == item then return true end
-  if recipe.results and product_prototype_uses_item(recipe.results, item) then return true end
-  if recipe.normal and recipe.normal.results and product_prototype_uses_item(recipe.normal.results, item) then return true end
-  if recipe.expensive and recipe.expensive.results and product_prototype_uses_item(recipe.expensive.results, item) then return true end
-  return false
-end
-
-local function is_value_in_table(t, value)
-  if not t or not value then return false end
-  for k,v in pairs(t) do
-    if value == v then return true end
-  end
-  return false
-end
-
 -- remove an item and any recipes and technologies that reference it
 function IC.destroy_crate(base_item_name)
   local item_name = IC.ITEM_PREFIX .. base_item_name
@@ -532,7 +310,7 @@ function IC.destroy_crate(base_item_name)
   -- keep a list of which recipes got removed, so we can search tech unlocks
   local dead_recipes = {}
   for _,recipe in pairs(data.raw.recipe) do
-    if uses_item_as_ingredient(recipe, item_name) or uses_item_as_result(recipe, item_name) then
+    if utils.uses_item_as_ingredient(recipe, item_name) or utils.uses_item_as_result(recipe, item_name) then
       IC.debug("IC: Removed recipe "..recipe.name)
       data.raw.recipe[recipe.name] = nil
       table.insert(dead_recipes, recipe.name)
@@ -544,7 +322,7 @@ function IC.destroy_crate(base_item_name)
       local temp = {}
       local found = false
       for _,effect in pairs(tech.effects) do
-        if effect.type ~= "unlock-recipe" or not is_value_in_table(dead_recipes, effect.recipe) then
+        if effect.type ~= "unlock-recipe" or not util.is_value_in_table(dead_recipes, effect.recipe) then
           table.insert(temp,effect)
         else found = true end
       end
@@ -552,35 +330,6 @@ function IC.destroy_crate(base_item_name)
       tech.effects = table.deepcopy(temp)
     end
   end
-end
-
--- brighter version of tier colour for working vis glow & lights
-local function brighter_colour(c)
-  local w = 255
-  if c.r <= 1 and c.g <= 1 and c.b <= 1 then
-    c.r = c.r * 255
-    c.g = c.g * 255
-    c.b = c.b * 255
-    if not c.a then c.a = 255
-    elseif c.a <=1 then c.a = c.a * 255 end
-  end
-  return { r = math.floor((c.r + w)/2), g = math.floor((c.g + w)/2), b = math.floor((c.b + w)/2), a = c.a }
-end
-
--- for calculating scales of energy, health etc.
-local function get_scale(this_tier, tiers, lowest, highest)
-  return lowest + ((highest - lowest) * ((this_tier - 1) / (tiers - 1)))
-end
-
--- energy use
-local function get_energy_table(this_tier, tiers, lowest, highest, passive_multiplier)
-  local total = get_scale(this_tier, tiers, lowest, highest)
-  local passive_energy_usage = total * passive_multiplier
-  local active_energy_usage = total * (1 - passive_multiplier)
-  return {
-    passive = passive_energy_usage .. "KW", -- passive energy drain as a string
-    active = active_energy_usage .. "KW", -- active energy usage as a string
-  }
 end
 
 -- create crating machine entities
@@ -610,16 +359,16 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
   end
   if not energy then
     if type(tier) ~= "number" then error("IC: energy usage not specified for containerization machine entity with non-numeric tier suffix") end
-    local energy_table = get_energy_table(tier, IC.TIERS, 500, 1000, 0.1)
+    local energy_table = utils.get_energy_table(tier, IC.TIERS, 500, 1000, 0.1)
     energy = energy_table.active
   end
   if not drain then
     if type(tier) ~= "number" then error("IC: energy drain not specified for containerization machine entity with non-numeric tier suffix") end
-    local energy_table = get_energy_table(tier, IC.TIERS, 500, 1000, 0.1)
+    local energy_table = utils.get_energy_table(tier, IC.TIERS, 500, 1000, 0.1)
     drain = energy_table.passive
   end
   if not health and type(tier) ~= "number" then error("IC: health not specified for containerization machine entity with non-numeric tier suffix") end
-  if not health then health = get_scale(tier, IC.TIERS, 300, 400) end
+  if not health then health = utils.get_scale(tier, IC.TIERS, 300, 400) end
   local machine = {
     name = IC.ENTITY_PREFIX .. tier,
     type = "assembling-machine",
@@ -746,7 +495,7 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
             height = 192,
             priority = "high",
             scale = 0.5,
-            tint = brighter_colour(colour),
+            tint = utils.brighter_colour(colour),
             width = 192
           },
           animation_speed = 1 / speed,
@@ -756,11 +505,11 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
           line_length = 10,
           height = 96,
           priority = "high",
-          tint = brighter_colour(colour),
+          tint = utils.brighter_colour(colour),
           width = 96
         },
         light = {
-          color = brighter_colour(colour),
+          color = utils.brighter_colour(colour),
           intensity = 0.4,
           size = 9,
           shift = {0, 0},
