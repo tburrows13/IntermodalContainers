@@ -360,6 +360,14 @@ local function isaCircularDependency(tech, next_tech, already_checked)
   return false
 end
 
+local function scale_pos(pos, scale)
+  return {pos[1] * scale, pos[2] * scale}
+end
+
+local function scale_box(box, scale)
+  return {scale_pos(box[1], scale), scale_pos(box[2], scale)}
+end
+
 --------------------------
 
 return {
@@ -380,5 +388,7 @@ return {
   is_value_in_table = is_value_in_table,
   get_scale = get_scale,
   get_energy_table = get_energy_table,
-  isaCircularDependency = isaCircularDependency
+  isaCircularDependency = isaCircularDependency,
+  scale_pos = scale_pos,
+  scale_box = scale_box,
 }

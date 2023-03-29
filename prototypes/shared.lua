@@ -532,7 +532,29 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
       filename = "__base__/sound/car-metal-impact.ogg",
       volume = 0.65
     },
+    se_allow_in_space = true,
   }
+
+  if settings.startup["ic-machine-size"].value == "4×4" then
+    local SCALE = 4/3 --1.33333
+
+    machine.tile_width = 4
+    machine.tile_height = 4
+    machine.collision_box = utils.scale_box(machine.collision_box, SCALE)
+    machine.selection_box = utils.scale_box(machine.selection_box, SCALE)
+    machine.animation.layers[1].scale = 1 * SCALE
+    machine.animation.layers[1].hr_version.scale = 0.5 * SCALE
+    machine.animation.layers[2].scale = 1 * SCALE
+    machine.animation.layers[2].hr_version.scale = 0.5 * SCALE
+    machine.animation.layers[3].scale = 1 * SCALE
+    machine.animation.layers[3].hr_version.scale = 0.5 * SCALE
+    machine.animation.layers[3].shift = utils.scale_pos(machine.animation.layers[3].shift, SCALE)
+    machine.animation.layers[3].hr_version.shift = utils.scale_pos(machine.animation.layers[3].hr_version.shift, SCALE)
+    machine.working_visualisations[1].animation.scale = 1 * SCALE
+    machine.working_visualisations[1].animation.hr_version.scale = 0.5 * SCALE
+    machine.working_visualisations[1].light.scale = 0.5 * SCALE
+    machine.scale_entity_info_icon = true
+  end
   data:extend({machine})
 end
 
