@@ -1,6 +1,11 @@
 {
   "item": [
     ["ff-container", "ic-container"],
+    ["deadlock-crating-machine-1", "ic-containerization-machine-1"],
+    ["deadlock-crating-machine-2", "ic-containerization-machine-2"],
+    ["deadlock-crating-machine-3", "ic-containerization-machine-3"],
+    ["deadlock-crating-machine-4", "ic-containerization-machine-4"],
+    ["deadlock-crating-machine-5", "ic-containerization-machine-5"],
     ["deadlock-crate-wood", "ic-container-wood"],
     ["deadlock-crate-coal", "ic-container-coal"],
     ["deadlock-crate-stone", "ic-container-stone"],
