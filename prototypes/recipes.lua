@@ -110,6 +110,3 @@ data:extend {
     result = IC.MOD_PREFIX.."container"
   },
 }
-
--- player character can pack and unpack
-table.insert(data.raw["character"]["character"].crafting_categories, "packing")
