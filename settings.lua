@@ -45,7 +45,7 @@ data:extend{
   },
   {
     type = "double-setting",
-    name = "ic-container-loss-rate",
+    name = "ic-container-loss-chance",
     setting_type = "startup",
     default_value = 0.005,
     minimum_value = 0,

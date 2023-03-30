@@ -31,7 +31,7 @@ IC.TIERS = 3
 IC.CRATE_STACK_SIZE = settings.startup["ic-container-stack-size"].value
 
 -- probability of losing a container when unloading
-IC.UNLOADING_LOSS_RATE = settings.startup["ic-container-loss-rate"].value
+IC.UNLOADING_LOSS_RATE = settings.startup["ic-container-loss-chance"].value
 
 -- which vanilla items are automatically crated, in which tier
 IC.VANILLA_ITEM_TIERS = {
