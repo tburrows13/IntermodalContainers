@@ -1,3 +1,3 @@
 require("prototypes.public")
-require("prototypes.vanilla")
+require("prototypes.container-gen")
 require("prototypes.inventory-sizes")

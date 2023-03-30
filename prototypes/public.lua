@@ -12,14 +12,14 @@ intermodal_containers = {}
 --[[
 
 	Items are automatically containerized if they meet the conditions in container-gen.lua.
-	To force an item to be containerized, set ic_create_container_override = true in its prototype.
-	To prevent an item from being containerized, set ic_create_container_override = false in its prototype.
+	To force an item to be containerized, set ic_create_container = true in its prototype.
+	To prevent an item from being containerized, set ic_create_container = false in its prototype.
 
 ]]
 
 -- intermodal_containers.destroy_container(item_name)
 -- Destroys the container of an item, all recipes which use or produce it, and removes all references to its recipe unlocks from all technologies
--- Better to use ic_create_container_override = false on the item's prototype to prevent it being created in the first place.
+-- Better to use ic_create_container = false on the item's prototype to prevent it being created in the first place.
 -- item_name (string) - name of the item you no longer want to be crateable
 -- Example: intermodal_containers.destroy_container("copper-cable")
 function intermodal_containers.destroy_container(item_name)

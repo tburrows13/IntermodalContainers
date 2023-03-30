@@ -27,8 +27,8 @@ local banned_items = {
 
 local function allowed_in_container(prototype)
   if prototype.name:sub(1, 13) == IC.ITEM_PREFIX then return false end
-  if prototype.ic_create_container_override == true then return true end
-  if prototype.ic_create_container_override == false then return false end
+  if prototype.ic_create_container == true then return true end
+  if prototype.ic_create_container == false then return false end
   if banned_items[prototype.name] then return false end
   if prototype.place_result then return false end
   if prototype.placed_as_equipment_result then return false end
