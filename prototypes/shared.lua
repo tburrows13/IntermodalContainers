@@ -33,18 +33,6 @@ IC.CRATE_STACK_SIZE = settings.startup["ic-container-stack-size"].value
 -- probability of losing a container when unloading
 IC.UNLOADING_LOSS_RATE = settings.startup["ic-container-loss-chance"].value
 
--- which vanilla items are automatically crated, in which tier
-IC.VANILLA_ITEM_TIERS = {
-  [1] = { "wood", "iron-ore", "copper-ore", "stone", "coal", "iron-plate", "copper-plate", "steel-plate", "stone-brick" },
-  [2] = { "copper-cable", "iron-gear-wheel", "iron-stick", "sulfur", "plastic-bar", "solid-fuel", "electronic-circuit", "advanced-circuit" },
-  [3] = { "processing-unit", "battery", "uranium-ore", "uranium-235", "uranium-238", 
-  -- -- additional items, for testing
-  -- "empty-barrel", "engine-unit", "electric-engine-unit", "explosives", "flying-robot-frame",
-  -- "rocket-control-unit", "low-density-structure", "rocket-fuel", "nuclear-fuel",
-  -- "automation-science-pack", "logistic-science-pack", "military-science-pack", "chemical-science-pack", "production-science-pack", "utility-science-pack", "space-science-pack"
-  },
-}
-
 -- machine colours
 IC.TIER_COLOURS = {
   [1] = {r=210, g=180, b= 80},
@@ -119,7 +107,7 @@ function IC.generate_crates(this_item, icon_size)
     log("ERROR: IC asked to crate an item that doesn't exist ("..this_item..")")
     return
   end
-  local items_per_crate = base_item.stack_size * IC.MULTIPLIER
+  local items_per_crate = math.ceil(base_item.stack_size * IC.MULTIPLIER)
   -- stop stack multiplier mods from breaking everything
   if items_per_crate > 65535 then
     log("ABORT: IC encountered a recipe with insane stack size ("..this_item..")")
@@ -177,7 +165,7 @@ function IC.generate_crates(this_item, icon_size)
     {
       type = "item",
       name = IC.ITEM_PREFIX .. this_item,
-      localised_name = {"item-name.ic-container-item", items_per_crate, {"item-name."..this_item}},
+      localised_name = {"item-name.ic-container-item", items_per_crate, base_item.localised_name or {"item-name."..this_item}},
       stack_size = IC.CRATE_STACK_SIZE,
       order = base_item.order,
       subgroup = IC.LOAD_PREFIX .. base_item.subgroup,
@@ -190,11 +178,11 @@ function IC.generate_crates(this_item, icon_size)
     {
       type = "recipe",
       name = IC.LOAD_PREFIX .. this_item,
-      localised_name = {"recipe-name.ic-load-recipe", {"item-name."..this_item}},
+      localised_name = {"recipe-name.ic-load-recipe", base_item.localised_name or {"item-name."..this_item}},
       order = base_item.order, 
       category = "packing",
       subgroup = IC.LOAD_PREFIX .. base_item.subgroup,
-      enabled = false,
+      enabled = true,
       ingredients = {
         {IC.MOD_PREFIX.."container", 1},
         {this_item, items_per_crate},
@@ -212,11 +200,11 @@ function IC.generate_crates(this_item, icon_size)
     {
       type = "recipe",
       name = IC.UNLOAD_PREFIX .. this_item,
-      localised_name = {"recipe-name.ic-unload-recipe", {"item-name."..this_item}},
+      localised_name = {"recipe-name.ic-unload-recipe", base_item.localised_name or {"item-name."..this_item}},
       order = base_item.order,
       category = "packing",
       subgroup = IC.UNLOAD_PREFIX .. base_item.subgroup,
-      enabled = false,
+      enabled = true,
       ingredients = {
         {IC.ITEM_PREFIX .. this_item, 1},
       },
@@ -231,6 +219,7 @@ function IC.generate_crates(this_item, icon_size)
       allow_as_intermediate = false,
       hide_from_stats = true,
       hide_from_player_crafting = true,
+      unlock_results = false,
     }
   })
   -- create subgroup

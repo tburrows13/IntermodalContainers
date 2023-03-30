@@ -1,7 +1,7 @@
 local IC = require "prototypes.shared"
 
 -- research
-for tier = 1,IC.TIERS do
+for tier = 1, IC.TIERS do
 	IC.create_crating_technology(tier)
 end
 
