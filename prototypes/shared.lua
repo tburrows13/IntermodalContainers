@@ -13,7 +13,7 @@ IC.P_G_ENTITY = IC.P_GRAPHICS .. "entities/"
 IC.LOGGING = false
 
 -- default tier 1 belt speed in items/s. we assume other belt tiers are a multiple of this. if not, you'll have to tweak the machine yourself
-IC.BELT_SPEED = 15
+IC.BELT_SPEED = 15 * settings.startup["ic-belts-per-machine"].value
 
 -- size of machine icons and crate background
 IC.ITEM_ICON_SIZE = 64
@@ -22,13 +22,16 @@ IC.ITEM_ICON_SIZE = 64
 IC.VANILLA_ICON_SIZE = 32
 
 -- how many stacks can hold a crate
-IC.MULTIPLIER = 20 -- Was 5
+IC.MULTIPLIER = settings.startup["ic-stacks-per-container"].value
 
 -- how many tiers of tech?
 IC.TIERS = 3
 
 -- how many crates in a stack of crates
-IC.CRATE_STACK_SIZE = 1
+IC.CRATE_STACK_SIZE = settings.startup["ic-container-stack-size"].value
+
+-- probability of losing a container when unloading
+IC.UNLOADING_LOSS_RATE = settings.startup["ic-container-loss-rate"].value
 
 -- which vanilla items are automatically crated, in which tier
 IC.VANILLA_ITEM_TIERS = {
@@ -219,7 +222,7 @@ function IC.generate_crates(this_item, icon_size)
       },
       icons = unloadrecipeicons,
       results = {
-        {type = "item", name = IC.MOD_PREFIX.."container", amount = 1, probability = 0.99},
+        {type = "item", name = IC.MOD_PREFIX.."container", amount = 1, probability = 1 - IC.UNLOADING_LOSS_RATE},
         {this_item, items_per_crate},
       },
       energy_required = items_per_crate / IC.BELT_SPEED,
