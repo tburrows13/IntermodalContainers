@@ -579,7 +579,7 @@ function IC.create_machine_item(tier, colour)
         { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour, icon_mipmaps = 4 },
       },
       icon_size = IC.ITEM_ICON_SIZE,
-      order = "z[crating-machine]-" .. order,
+      order = "d-a[".. IC.ENTITY_PREFIX .."1]-" .. order,
       place_result = IC.ENTITY_PREFIX .. tier,
       flags = {},
     }
