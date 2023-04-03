@@ -94,6 +94,19 @@ function IC.get_technology_from_item(item_name)
   return default_tech
 end
 
+-- Update stack size descriptions added by other mods because we run in data-final-fixes
+local function update_description_stack_size(description, stack_size)
+  if not description then return end
+  if type(description) ~= "table" then return end
+  if description[1] == "description.stack-size" or description[1] == "other.stack-size-description" then
+    -- Extended Descriptions and Stack Size Tooltip
+    description[2] = stack_size
+  end
+  for _, item in pairs(description) do
+    update_description_stack_size(item, stack_size)
+  end
+end
+
 -- generate items and recipes for crated items
 IC.CRATE_ORDER = 0
 function IC.generate_crates(this_item, icon_size)
@@ -113,6 +126,7 @@ function IC.generate_crates(this_item, icon_size)
   -- Adjust stack size
   if IC.STACK_SIZE_MULTIPLIER ~= 1 and base_item.stack_size >= 20 then
     base_item.stack_size = math.ceil(base_item.stack_size * IC.STACK_SIZE_MULTIPLIER)
+    update_description_stack_size(base_item.localised_description, tostring(base_item.stack_size))
   end
 
   local items_per_crate = math.ceil(base_item.stack_size * IC.MULTIPLIER)
