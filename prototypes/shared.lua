@@ -21,6 +21,8 @@ IC.ITEM_ICON_SIZE = 64
 -- size of vanilla's item icons
 IC.VANILLA_ICON_SIZE = 32
 
+IC.STACK_SIZE_MULTIPLIER = settings.startup["ic-stack-size-multiplier"].value
+
 -- how many stacks can hold a crate
 IC.MULTIPLIER = settings.startup["ic-stacks-per-container"].value
 
@@ -107,6 +109,12 @@ function IC.generate_crates(this_item, icon_size)
     log("ERROR: IC asked to crate an item that doesn't exist ("..this_item..")")
     return
   end
+
+  -- Adjust stack size
+  if IC.STACK_SIZE_MULTIPLIER ~= 1 and base_item.stack_size >= 20 then
+    base_item.stack_size = math.ceil(base_item.stack_size * IC.STACK_SIZE_MULTIPLIER)
+  end
+
   local items_per_crate = math.ceil(base_item.stack_size * IC.MULTIPLIER)
   -- stop stack multiplier mods from breaking everything
   if items_per_crate > 65535 then
@@ -114,7 +122,7 @@ function IC.generate_crates(this_item, icon_size)
     return
   end
   local icons = utils.get_item_icon(base_item)
-  if not icons then 
+  if not icons then
     log("ERROR: IC asked to crate an item with no icon or icons properties ("..this_item..")")
     return
   end

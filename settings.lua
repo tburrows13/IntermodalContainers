@@ -9,12 +9,21 @@ data:extend{
   },
   {
     type = "double-setting",
+    name = "ic-stack-size-multiplier",
+    setting_type = "startup",
+    default_value = 1,
+    minimum_value = 0.01,
+    maximum_value = 1000,
+    order = "b-a",
+  },
+  {
+    type = "double-setting",
     name = "ic-stacks-per-container",
     setting_type = "startup",
     default_value = 0.2,
     minimum_value = 0.01,
     maximum_value = 1000,
-    order = "b",
+    order = "b-b",
   },
   {
     type = "int-setting",
@@ -23,7 +32,7 @@ data:extend{
     default_value = 5,
     minimum_value = 1,
     maximum_value = 1000,
-    order = "c",
+    order = "b-c",
   },
   {
     type = "double-setting",
@@ -32,7 +41,7 @@ data:extend{
     default_value = 1,
     minimum_value = 0.01,
     maximum_value = 1000,
-    order = "d",
+    order = "c",
   },
   {
     type = "double-setting",
@@ -41,7 +50,7 @@ data:extend{
     default_value = 1,
     minimum_value = 0.01,
     maximum_value = 1000,
-    order = "e",
+    order = "d",
   },
   {
     type = "double-setting",
@@ -50,6 +59,6 @@ data:extend{
     default_value = 0.005,
     minimum_value = 0,
     maximum_value = 1,
-    order = "f",
+    order = "e",
   },
 }
