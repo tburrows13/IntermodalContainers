@@ -32,7 +32,7 @@ local function allowed_in_container(prototype)
   if banned_items[prototype.name] then return false end
   if prototype.place_result then return false end
   if prototype.placed_as_equipment_result then return false end
-  if prototype.place_as_tile then return false end
+  --if prototype.place_as_tile then return false end
   if prototype.subgroup == "barrel" then return false end
   if utils.is_value_in_table(prototype.flags, "hidden") then return false end
   if utils.is_value_in_table(prototype.flags, "only-in-cursor") then return false end
@@ -40,16 +40,18 @@ local function allowed_in_container(prototype)
   return true
 end
 
-for item_name, prototype in pairs(data.raw.item) do
-  if allowed_in_container(prototype) then
-    IC.generate_crates(item_name)
-    --add_unlocks(prototype)
-  end
-end
-
-for item_name, prototype in pairs(data.raw.tool) do
-  if allowed_in_container(prototype) then
-    IC.generate_crates(item_name)
-    --add_unlocks(prototype)
+local item_types = {
+  "item",
+  "ammo",
+  --"capsule",
+  --"module",
+  "tool",  -- Science packs
+  --"repair-tool",
+}
+for _, item_type in pairs(item_types) do
+  for item_name, prototype in pairs(data.raw[item_type]) do
+    if allowed_in_container(prototype) then
+      IC.generate_crates(item_name)
+    end
   end
 end
