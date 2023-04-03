@@ -2,15 +2,14 @@
     "name": "IntermodalContainers",
     "version": "2.0.0",
     "title": "Intermodal Containers",
-    "author": "Deadlock989",
-    "contact": "",
-    "homepage": "https://mods.factorio.com/mod/IntermodalContainers",
+    "author": "Xorimuth, RedRafe",
+    "homepage": "https://discord.gg/pkJc4v9nfT",
     "source": "https://github.com/tburrows13/IntermodalContainers",
     "dependencies": [
-        "base >= 1.1",
-        "? ReStack",
+        "base",
+        "(?) ReStack",
         "! DeadlockCrating"
     ],
-    "description": "Fork from DeadlockCratingMachine mod",
+    "description": "Load items into containers to boost belt throughput and train loading speeds.\nDeveloped from Deadlock's Crating Machine.",
     "factorio_version": "1.1"
 }
