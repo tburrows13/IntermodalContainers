@@ -2,24 +2,23 @@ local IC = require "prototypes.shared"
 
 -- the machines
 IC.create_machine_recipe(1, {
-	{"assembling-machine-1", 1},
-	{"electric-engine-unit", 1},
-	{"stack-inserter", 2},
+	{"engine-unit", 4},
+	{"stack-inserter", 1},
 	{"steel-plate", 20},
 })
 
 IC.create_machine_recipe(2, {
 	{IC.ENTITY_PREFIX.."1", 1},
-	{"electric-engine-unit", 1},
+	{"electric-engine-unit", 2},
 	{"stack-inserter", 2},
 	{"steel-plate", 30},
 })
 
 IC.create_machine_recipe(3, {
 	{IC.ENTITY_PREFIX.."2", 1},
-	{"electric-engine-unit", 1},
-	{"stack-inserter", 2},
-	{"steel-plate", 50},
+  {"electric-engine-unit", 8},
+  {"advanced-circuit", 8},
+	{"steel-plate", 40},
 })
 
 -- crafting tab groups

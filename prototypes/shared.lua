@@ -53,7 +53,7 @@ IC.TECH_PREFIX   = IC.MOD_PREFIX.."containerization-"
 
 -- research prerequisites per tier
 IC.TECH_PREREQUISITES = {
-  [1] = {"automation", "electric-engine", "stack-inserter"},
+  [1] = {"automation","stack-inserter"},
   [2] = {"automation-2", IC.TECH_PREFIX.."1"},
   [3] = {"automation-3", IC.TECH_PREFIX.."2"},
 }
