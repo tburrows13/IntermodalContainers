@@ -2,10 +2,11 @@ if not mods["Krastorio2"] then return end
 
 local IC = require "prototypes.shared"
 
--- IC's recipe and technology
--- remove automation from cont-1
+-- IC's technology and upgrade planner
+krastorio.technologies.removePrerequisite(IC.TECH_PREFIX.."1", "automation")
+data.raw["assembling-machine"][IC.ENTITY_PREFIX.."3"].next_upgrade = IC.ENTITY_PREFIX.."4"
 
--- Add containerization machines for tier 4&5 of Bob's belts
+-- Add containerization machines for tier 4&5 of Krastorio2 belts
 intermodal_containers.add_tier(
 {
   localised_name = {"compatibility.kr-tier-4"},
@@ -20,7 +21,7 @@ intermodal_containers.add_tier(
   },
   colour = { r=46, g=229, b=92 }, -- green #2EE55C
   speed = 4,
-  prerequisites = { IC.TECH_PREFIX.."3", "kr-logistic-4" },
+  prerequisites = { IC.TECH_PREFIX.."3", "kr-logistic-4" }, -- Advanced
   unit =
   {
     count = 700,
@@ -37,7 +38,7 @@ intermodal_containers.add_tier(
 })
 intermodal_containers.add_tier(
 {
-  localised_name = {"compatibility.kr-tier-5"},
+  localised_name = {"compatibility.kr-tier-5"}, -- Superior
   tier = 5,
   ingredients =
   {
