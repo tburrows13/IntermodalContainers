@@ -10,7 +10,7 @@ if mods["boblogistics"] and mods["boblibrary"] then
   -- Add containerization machines for tier 4&5 of Bob's belts
   intermodal_containers.add_tier(
   {
-    localised_name = {"compatibility.bobs-tier-4"}, --"Turbo conatiner loader"
+    localised_name = {"compatibility.bobs-tier-4"}, -- Turbo
     tier = 4,
     upgrade = IC.ENTITY_PREFIX.."5",
     ingredients =
@@ -38,7 +38,7 @@ if mods["boblogistics"] and mods["boblibrary"] then
   })
   intermodal_containers.add_tier(
   {
-    localised_name = {"compatibility.bobs-tier-5"}, --"Ultimate conatiner loader",
+    localised_name = {"compatibility.bobs-tier-5"}, -- Ultimate
     tier = 5,
     ingredients =
     {
