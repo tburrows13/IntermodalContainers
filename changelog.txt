@@ -1,26 +1,25 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
-Date: 13. 04. 2023
+Date: 14 April 2023
   Features:
-    - Added tier 4-5 of IC-machines to match Krastorio2's tier 4-5 belts & upgrade planners
+    - Added tier 4-5 of containerization machines to match Krastorio2's tier 4-5 belts
     - Added compatibility with Bob's Logistics:
-      - IC-Machine-1 now requires lower tier inserter
-      - Added tier 4-5 of IC-machines to match Bob's tier 4-5 belts & upgrade planners
+      - Tier 1 machine now requires lower tier inserter
+      - Added tier 4-5 of containerization machines to match Bob's tier 4-5 belts
     - Now supported by Artisanal Reskins: Compatibility by Kirazy
+    - Renamed machines from "Container loader" to "Containerization machine"
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
-Date: 24. 03. 2023
+Date: 3 April 2023
   Info:
-    - Release v2.0.0 based on "DeadlockCrating" implementing new crating graphics and functions
+    - Forked from "DeadlockCrating"
   Changes:
-    - Containers stack to 1 instead of 5
-    - Containers hold 20x item stacks
-    - New graphics for containers items and recipes
-    - Split tabs for loading/unloading
-    - Containers look oversized on surface
-  Features:
-    - API: "add_crate" can now create crates from any item-prototype
-    - API: "add_crate_autotech" does not need to specify the technology
+    - Uses steel containers instead of wooden crates
+    - Improved container and recipe graphics
+    - Added many configuration settings
+    - Machines are now 4x4 by default
+    - Containers are only returned 99.5% of the time by default
+    - Automatically detects items from any mod, rather than needing specific compatibility implemented
 ---------------------------------------------------------------------------------------------------
 Version: 1.7.0
 Date: 13. 12. 2020
