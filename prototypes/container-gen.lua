@@ -22,7 +22,8 @@ end
 
 local banned_items = {
   ["ic-container"] = true,
-  ["ee-super-fuel"] = true,
+  ["ee-super-fuel"] = true,  -- Editor Extensions
+  ["bpsb-sbt-water"] = true,  -- Blueprint Sandboxes
 }
 
 local function allowed_in_container(prototype)
