@@ -355,8 +355,8 @@ end
 -- drain (string) - mandatory if tier is not a number, otherwise optional - constant energy drain of the machine, e.g. "10kW" etc. Defaults to vanilla tier scheme if not specified
 -- upgrade (string) - optional - the entity this machine will be automatically upgraded to by the upgrade planner.
 -- health (integer) - mandatory if tier is not a number, otherwise optional - the max health of the machine. Defaults to vanilla tier scheme if not specified for numbered tiers.
--- localisation (string) - optional - the displayed name of the machine
-function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain, upgrade, health, localisation)
+-- localised_name (LocalisedString) - optional - the displayed name of the machine
+function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain, upgrade, health, localised_name)
   if not tier then error("IC: tier not specified for containerization machine entity") end
   if not speed then
     if type(tier) ~= "number" then error("IC: speed not specified for containerization machine entity with non-numeric tier suffix") end
@@ -387,7 +387,7 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
   local machine = {
     name = IC.ENTITY_PREFIX .. tier,
     type = "assembling-machine",
-    localised_name = localisation,
+    localised_name = localised_name,
     next_upgrade = upgrade,
     fast_replaceable_group = "crating-machine",
     icons = {
@@ -577,8 +577,8 @@ end
 -- create crating machine items
 -- tier (integer) - mandatory - numbered suffix appended to the name
 -- colour (table) - optional - Factorio colour table - defaults to IC-defined defaults if not specified, or pink if tier is outside of range
--- localisation (string) - optional - the displayed name of the item
-function IC.create_machine_item(tier, colour, localisation)
+-- localised_name (LocalisedString) - optional - the displayed name of the item
+function IC.create_machine_item(tier, colour, localised_name)
   if not tier then error("IC: tier not specified for crating machine item") end
   if not colour then
     if tier > 0 and tier <= IC.TIERS then colour = IC.TIER_COLOURS[tier]
@@ -589,7 +589,7 @@ function IC.create_machine_item(tier, colour, localisation)
     {
       type = "item",
       name = IC.ENTITY_PREFIX .. tier,
-      localised_name = localisation,
+      localised_name = localised_name,
       subgroup = "production-machine",
       stack_size = 50,
       icons = {
@@ -607,15 +607,15 @@ end
 -- create crating machine recipes
 -- tier (integer) - mandatory - numbered suffix appended to the name
 -- ingredients (table) - mandatory - table of IngredientPrototypes
--- localisation (string) - optional - the displayed name of the recipe
-function IC.create_machine_recipe(tier, ingredients)
+-- localised_name (LocalisedString) - optional - the displayed name of the recipe
+function IC.create_machine_recipe(tier, ingredients, localised_name)
   if not tier then error("IC: tier not specified for crating machine recipe") end
   if not ingredients then error("IC: ingredients not specified for crating machine recipe") end
   data:extend({
     {
       type = "recipe",
       name = IC.ENTITY_PREFIX .. tier,
-      localised_name = localisation,
+      localised_name = localised_name,
       enabled = false,
       ingredients = ingredients,
       result = IC.ENTITY_PREFIX .. tier,

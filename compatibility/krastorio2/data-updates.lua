@@ -9,7 +9,7 @@ data.raw["assembling-machine"][IC.ENTITY_PREFIX.."3"].next_upgrade = IC.ENTITY_P
 -- Add containerization machines for tier 4&5 of Krastorio2 belts
 intermodal_containers.add_tier(
 {
-  localised_name = {"compatibility.kr-tier-4"},
+  localised_name = {"entity-name.ic-containerization-machine-4-kr"},
   tier = 4,
   upgrade = IC.ENTITY_PREFIX.."5",
   ingredients =
@@ -38,7 +38,7 @@ intermodal_containers.add_tier(
 })
 intermodal_containers.add_tier(
 {
-  localised_name = {"compatibility.kr-tier-5"}, -- Superior
+  localised_name = {"entity-name.ic-containerization-machine-5-kr"}, -- Superior
   tier = 5,
   ingredients =
   {
