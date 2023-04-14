@@ -42,6 +42,7 @@ end
 -- .prerequisites (table) - optional - a list of technology prerequisites (see https://wiki.factorio.com/Prototype/Technology#prerequisites). Can be nil.
 -- .unit (table) - mandatory if tier is not 1-3, otherwise optional - the unit cost for the technology (see https://wiki.factorio.com/Prototype/Technology#unit). Defaults to native tier scheme if not specified and tier is 1-3. Cannot be nil.
 -- .health (integer) - mandatory if tier is not a number, otherwise optional - the max health of the machine. Defaults to vanilla tier scheme if not specified for numbered tiers. 
+-- .localised_name (string) - optional - the name displayed in game, default is "ic-containerization-machine-N"
 -- The resulting machine item, recipe and entity will be named deadlock-crating-machine-N where N = tier. The technology is named deadlock-crating-N.
 function intermodal_containers.add_tier(parameters)
 	if not parameters.tier then error("IC: create_tier(): tier not specified") end
@@ -61,8 +62,8 @@ function intermodal_containers.add_tier(parameters)
 	if parameters.prerequisites and type(parameters.prerequisites) ~= "table" then error("IC: create_tier(): prerequisites given as non-table") end
 	if parameters.unit and type(parameters.unit) ~= "table" then error("IC: create_tier(): unit given as non-table") end
 	if parameters.health and type(parameters.health) ~= "number" then error("IC: create_tier(): health given as non-number") end
-	IC.create_machine_item(parameters.tier, parameters.colour)
-	IC.create_machine_recipe(parameters.tier, parameters.ingredients)
-	IC.create_machine_entity(parameters.tier, parameters.colour, parameters.speed, parameters.pollution, parameters.energy, parameters.drain, parameters.upgrade, parameters.health)
+	IC.create_machine_item(parameters.tier, parameters.colour, parameters.localised_name)
+	IC.create_machine_recipe(parameters.tier, parameters.ingredients, parameters.localised_name)
+	IC.create_machine_entity(parameters.tier, parameters.colour, parameters.speed, parameters.pollution, parameters.energy, parameters.drain, parameters.upgrade, parameters.health, parameters.localised_name)
 	IC.create_crating_technology(parameters.tier, parameters.colour, parameters.prerequisites, parameters.unit)
 end
