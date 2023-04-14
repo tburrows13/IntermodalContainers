@@ -2,6 +2,7 @@
 Version: 2.0.1
 Date: 13. 04. 2023
   Features:
+    - Added tier 4-5 of IC-machines to match Krastorio2's tier 4-5 belts & upgrade planners
     - Added compatibility with Bob's Logistics:
       - IC-Machine-1 now requires lower tier inserter
       - Added tier 4-5 of IC-machines to match Bob's tier 4-5 belts & upgrade planners
