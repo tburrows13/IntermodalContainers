@@ -190,7 +190,7 @@ function IC.generate_crates(this_item, icon_size)
       localised_name = {"item-name.ic-container-item", items_per_crate, base_item.localised_name or {"item-name."..this_item}},
       stack_size = IC.CRATE_STACK_SIZE,
       order = base_item.order,
-      subgroup = IC.LOAD_PREFIX .. base_item.subgroup,
+      subgroup = IC.LOAD_PREFIX .. (base_item.subgroup or this_item),
       allow_decomposition = false,
       icons = containeritemicons,
       pictures = { layers = containeritemlayers },
@@ -203,7 +203,7 @@ function IC.generate_crates(this_item, icon_size)
       localised_name = {"recipe-name.ic-load-recipe", base_item.localised_name or {"item-name."..this_item}},
       order = base_item.order, 
       category = "packing",
-      subgroup = IC.LOAD_PREFIX .. base_item.subgroup,
+      subgroup = IC.LOAD_PREFIX .. (base_item.subgroup or this_item),
       enabled = true,
       ingredients = {
         {IC.MOD_PREFIX.."container", 1},
@@ -225,7 +225,7 @@ function IC.generate_crates(this_item, icon_size)
       localised_name = {"recipe-name.ic-unload-recipe", base_item.localised_name or {"item-name."..this_item}},
       order = base_item.order,
       category = "packing",
-      subgroup = IC.UNLOAD_PREFIX .. base_item.subgroup,
+      subgroup = IC.UNLOAD_PREFIX .. (base_item.subgroup or this_item),
       enabled = true,
       ingredients = {
         {IC.ITEM_PREFIX .. this_item, 1},
@@ -245,17 +245,17 @@ function IC.generate_crates(this_item, icon_size)
     }
   })
   -- create subgroup
-  if not utils.subgroup_exists(IC.LOAD_PREFIX .. base_item.subgroup) then
+  if not utils.subgroup_exists(IC.LOAD_PREFIX .. (base_item.subgroup or this_item)) then
     data:extend{
       {
         type  = "item-subgroup",
-        name  = IC.LOAD_PREFIX .. base_item.subgroup,
+        name  = IC.LOAD_PREFIX .. (base_item.subgroup or this_item),
         group = IC.LOAD_PREFIX .. "container",
         order = "a[load]-" .. (base_item.order or "unordered"),
       },
       {
         type  = "item-subgroup",
-        name  = IC.UNLOAD_PREFIX .. base_item.subgroup,
+        name  = IC.UNLOAD_PREFIX .. (base_item.subgroup or this_item),
         group = IC.UNLOAD_PREFIX .. "container",
         order = "b[unload]-" .. (base_item.order or "unordered"),
       }
