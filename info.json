@@ -8,6 +8,7 @@
     "dependencies": [
         "base",
         "(?) ReStack",
+        "(?) Krastorio2",
         "! DeadlockCrating"
     ],
     "description": "Load items into containers to boost belt throughput and train loading speeds.\nDeveloped from Deadlock's Crating Machine.",
