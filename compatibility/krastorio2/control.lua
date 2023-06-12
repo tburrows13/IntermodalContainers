@@ -29,7 +29,7 @@ end
 local function on_configuration_changed(changed_data)
   if not game.active_mods["Krastorio2"] then return end
 
-  if changed_data.mod_changes["Krastorio2"].old_version == nil then
+  if changed_data.mod_changes["Krastorio2"] and changed_data.mod_changes["Krastorio2"].old_version == nil then
     add_radioactive_items()
   end
 end
