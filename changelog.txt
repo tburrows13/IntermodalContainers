@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 17 June 2023
+  Compatibility:
+    - [Krastorio 2] Added radioactivity damage to containerized uranium items
+    - Fixed crash on load with Belt Sorters
+    - Fixed crash on load with Red alert 2 Nuclear-silo
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 14 April 2023
   Features:
