@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 22 June 2023
+  Compatibility:
+    - Fixed incorrect container loading recipes with BZ Aluminum
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 17 June 2023
   Compatibility:
