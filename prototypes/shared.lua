@@ -65,6 +65,18 @@ IC.TECH_BASE = {
   [3] = "inserter-capacity-bonus-5",
 }
 
+IC.TECH_BASE_FALLBACK = {  -- Seperated And Infinite Inserter Capacity Research mod removes other techs
+  [1] = nil,
+  [2] = "stack-inserter-capacity-bonus-2",
+  [3] = "stack-inserter-capacity-bonus-3",
+}
+
+IC.TECH_COUNT_FALLBACK = {
+  [1] = 150,
+  [2] = 250,
+  [3] = 300,
+}
+
 IC.ICONS = {
   ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
   ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
@@ -638,7 +650,12 @@ function IC.create_crating_technology(tier, colour, prerequisites, unit)
   if not prerequisites and tier >= 1 and tier <= IC.TIERS then prerequisites = IC.TECH_PREREQUISITES[tier] end
   if not unit then
     if tier < 1 or tier > IC.TIERS then error("IC: asked to create a technology outside of vanilla tier range, but research unit costs were not specified") end
-    unit = table.deepcopy(data.raw.technology[IC.TECH_BASE[tier]].unit)
+    local base_tech = data.raw.technology[IC.TECH_BASE[tier]]
+    if not base_tech or not base_tech.unit.count then
+      -- In case mods have removed the base tech, or turned it into infinite (replaced count with count_formula)
+      base_tech = data.raw.technology[IC.TECH_BASE_FALLBACK[tier]]
+    end
+    unit = table.deepcopy(base_tech.unit)
     unit.count = unit.count * 2
   end
   for _, prerequisite in pairs(prerequisites) do
