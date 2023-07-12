@@ -10,6 +10,7 @@
         "(?) ReStack",
         "(?) Krastorio2",
         "(?) bzaluminum",
+        "(?) pypostprocessing",
         "! DeadlockCrating"
     ],
     "description": "Load items into containers to boost belt throughput and train loading speeds.\nDeveloped from Deadlock's Crating Machine.",
