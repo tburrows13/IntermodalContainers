@@ -3,6 +3,7 @@ Version: 2.0.4
 Date: 12 July 2023
   Compatibility:
     - Fixed crash on load with Seperated And Infinite Inserter Capacity Research
+    - Fixed incorrect container icon scaling for some modded items
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 22 June 2023

@@ -18,9 +18,6 @@ IC.BELT_SPEED = 15 * settings.startup["ic-belts-per-machine"].value
 -- size of machine icons and crate background
 IC.ITEM_ICON_SIZE = 64
 
--- size of vanilla's item icons
-IC.VANILLA_ICON_SIZE = 32
-
 IC.STACK_SIZE_MULTIPLIER = settings.startup["ic-stack-size-multiplier"].value
 
 -- how many stacks can hold a crate
@@ -121,13 +118,7 @@ end
 
 -- generate items and recipes for crated items
 IC.CRATE_ORDER = 0
-function IC.generate_crates(this_item, icon_size)
-  if icon_size then
-    if (icon_size ~= 32 and icon_size ~= 64 and icon_size ~= 128) then
-      log("ERROR: IC asked to use icon_size that is not 32, 64 or 128")
-      return
-    end
-  else icon_size = IC.ITEM_ICON_SIZE end
+function IC.generate_crates(this_item)
   -- The crated item
   local base_item = utils.get_item_prototype(this_item)
   if not base_item then
@@ -213,7 +204,7 @@ function IC.generate_crates(this_item, icon_size)
       type = "recipe",
       name = IC.LOAD_PREFIX .. this_item,
       localised_name = {"recipe-name.ic-load-recipe", base_item.localised_name or {"item-name."..this_item}},
-      order = base_item.order, 
+      order = base_item.order,
       category = "packing",
       subgroup = IC.LOAD_PREFIX .. (base_item.subgroup or this_item),
       enabled = true,

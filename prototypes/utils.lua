@@ -108,10 +108,10 @@ local function get_item_icon(item)
   -- Icons has priority over icon, check for icons definition first
   local icons = {}
   if item.icons then
-    for _,icon in pairs(item.icons) do
+    for _, icon in pairs(item.icons) do
       local temp_icon = table.deepcopy(icon)
-      temp_icon.scale = temp_icon.scale or 1
       if not temp_icon.icon_size then temp_icon.icon_size = item.icon_size end
+      temp_icon.scale = temp_icon.scale or (64 / temp_icon.icon_size)
       table.insert(icons, temp_icon)
     end
   -- If no icons field, look for icon definition
