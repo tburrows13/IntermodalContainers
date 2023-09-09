@@ -61,4 +61,11 @@ data:extend{
     maximum_value = 1,
     order = "e",
   },
+  {
+    type = "bool-setting",
+    name = "ic-container-oversized-icon",
+    setting_type = "startup",
+    default_value = true,
+    order = "f",
+  },
 }

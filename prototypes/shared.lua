@@ -74,6 +74,9 @@ IC.TECH_COUNT_FALLBACK = {
   [3] = 300,
 }
 
+IC.OVERSIZED_CONTAINERS = settings.startup["ic-container-oversized-icon"].value
+IC.CONTAINER_PICTURE_SCALE = IC.OVERSIZED_CONTAINERS and 1 or 0.5
+
 IC.ICONS = {
   ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
   ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
@@ -98,7 +101,7 @@ function IC.get_technology_from_item(item_name)
   local default_tech = IC.TECH_PREFIX.."1"
   local proposed_tech = utils.get_technology_from_item(item_name)
   if proposed_tech and (not utils.is_descendant_of(default_tech, proposed_tech)) then 
-    return proposed_tech 
+    return proposed_tech
   end
   return default_tech
 end
@@ -166,7 +169,8 @@ function IC.generate_crates(this_item)
     layer.mipmap_count = layer.icon_mipmaps
     layer.icon_mipmaps = nil
     layer.shift = layer.shift or {0, 0}
-    layer.shift = util.by_pixel(layer.shift[1], layer.shift[2])
+    layer.shift = util.by_pixel(layer.shift[1] * IC.CONTAINER_PICTURE_SCALE, layer.shift[2] * IC.CONTAINER_PICTURE_SCALE)
+    layer.scale = layer.scale * IC.CONTAINER_PICTURE_SCALE
   end
   local loadrecipeicons = {
     table.deepcopy(IC.ICONS.LOAD_BG),
