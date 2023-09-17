@@ -1,3 +1,7 @@
+Version: 2.0.5
+  Compatibility:
+    - Fixed issue with SE & efficiency modules
+    - Added abillity to configure number of module slots
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 12 July 2023
