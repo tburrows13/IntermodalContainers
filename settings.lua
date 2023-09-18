@@ -8,6 +8,15 @@ data:extend{
     order = "a",
   },
   {
+    type = "int-setting",
+    name = "ic-machine-modules",
+    setting_type = "startup",
+    default_value = 1,
+    minimum_value = 1,
+    maximum_value = 3,
+    order = "a-a",
+  },
+  {
     type = "double-setting",
     name = "ic-stack-size-multiplier",
     setting_type = "startup",

@@ -32,6 +32,9 @@ IC.CRATE_STACK_SIZE = settings.startup["ic-container-stack-size"].value
 -- probability of losing a container when unloading
 IC.UNLOADING_LOSS_RATE = settings.startup["ic-container-loss-chance"].value
 
+-- Number of modules for machines
+IC.MODULE_SLOTS = settings.startup["ic-machine-modules"].value
+
 -- machine colours
 IC.TIER_COLOURS = {
   [1] = {r=210, g=180, b= 80},
@@ -408,9 +411,9 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
     crafting_speed = speed,
     module_specification = {
       module_info_icon_shift = { 0, 0.8 },
-      module_slots = 1
+      module_slots = IC.MODULE_SLOTS
     },
-    allowed_effects = {"consumption"},
+    allowed_effects = { "consumption", "pollution" },
     crafting_categories = {"packing"},
     gui_title_key = "gui-title.ic-crating",
     max_health = health,
