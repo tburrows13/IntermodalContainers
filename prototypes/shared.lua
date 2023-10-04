@@ -55,7 +55,7 @@ IC.TECH_PREFIX   = IC.MOD_PREFIX.."containerization-"
 IC.TECH_PREREQUISITES = {
   [1] = {"automation","stack-inserter"},
   [2] = {"automation-2", IC.TECH_PREFIX.."1"},
-  [3] = {"automation-3", IC.TECH_PREFIX.."2"},
+  [3] = {"automation-3", "logistics-3", IC.TECH_PREFIX.."2"},
 }
 
 -- copy and multiply research cost per tier from these vanilla techs
