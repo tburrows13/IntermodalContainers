@@ -1,7 +1,13 @@
+---------------------------------------------------------------------------------------------------
 Version: 2.0.5
+  Features:
+    - Added mod setting to disable oversized icons on belts
+    - Added mod setting to change number of module slots in containerization machines
   Compatibility:
-    - Fixed issue with SE & efficiency modules
-    - Added abillity to configure number of module slots
+    - Added 3 new tiers of containerization machines when Advanced Belts is enabled
+    - Fixed being unable to use Space Exploration efficiency modules in containerization machines
+    - Fixed incorrect container loading recipes with BZ Carbon and BZ Natural Gas
+    - Fixed crash on load with BZ Titanium and Endgame Combat
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 12 July 2023
