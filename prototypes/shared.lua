@@ -78,7 +78,7 @@ IC.TECH_COUNT_FALLBACK = {
 }
 
 IC.OVERSIZED_CONTAINERS = settings.startup["ic-container-oversized-icon"].value
-IC.CONTAINER_PICTURE_SCALE = IC.OVERSIZED_CONTAINERS and 1 or 0.5
+IC.CONTAINER_PICTURE_SCALE = IC.OVERSIZED_CONTAINERS and 0.8 or 0.5
 
 IC.ICONS = {
   ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
