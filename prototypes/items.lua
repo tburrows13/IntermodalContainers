@@ -19,7 +19,7 @@ data:extend{
       {
       filename = IC.P_G_ICONS .. "container/container.png",
       size = 64,
-      scale = 0.5,
+      scale = 0.5 * IC.CONTAINER_PICTURE_SCALE,
       },
     },
   },
