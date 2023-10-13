@@ -25,6 +25,21 @@ IC.create_machine_recipe(3, {
 data:extend({
   -- Pack Group
   {
+    name = IC.MOD_PREFIX .. "containers",
+    order = "y-0",
+    type = "item-group",
+    icon_size = 128,
+    icons = {
+      {
+        icon = IC.P_G_ICONS .. "square/crating-icon-base-128.png"
+      },
+      {
+        icon = IC.P_G_ICONS .. "square/crating-icon-mask-128.png",
+        tint = IC.TIER_COLOURS[1]
+      },
+    },
+  },
+  {
     name = IC.LOAD_PREFIX .. "container",
     order = "y-1",
     type = "item-group",
@@ -73,8 +88,14 @@ data:extend({
 
 -- Create item subgroups
 for name, subgroup in pairs(data.raw["item-subgroup"]) do
-  if subgroup.group == "intermediate-products" then
+  if subgroup.group ~= IC.MOD_PREFIX .. "containers" and subgroup.group ~= IC.LOAD_PREFIX .. "container" and subgroup.group ~= IC.UNLOAD_PREFIX .. "container" then
     data:extend{
+      {
+        type  = "item-subgroup",
+        name  = IC.MOD_PREFIX .. name,
+        group = IC.MOD_PREFIX .. "containers",
+        order = "a[container]-" .. (subgroup.order or "unordered"),
+      },
       {
         type  = "item-subgroup",
         name  = IC.LOAD_PREFIX .. name,

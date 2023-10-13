@@ -200,7 +200,7 @@ function IC.generate_crates(this_item)
       localised_name = {"item-name.ic-container-item", items_per_crate, base_item.localised_name or {"item-name."..this_item}},
       stack_size = IC.CRATE_STACK_SIZE,
       order = base_item.order,
-      subgroup = IC.LOAD_PREFIX .. (base_item.subgroup or this_item),
+      subgroup = IC.MOD_PREFIX .. (base_item.subgroup or this_item),
       allow_decomposition = false,
       icons = containeritemicons,
       pictures = { layers = containeritemlayers },
