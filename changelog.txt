@@ -1,5 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 3 November 2023
+  Changes:
+    - Slightly reduced default size of items when on belts
+    - Moved containerised items from "Load containers" group to "Containers" group
+  Bugfixes:
+    - Fixed oversized icons setting not apply to empty containers
+---------------------------------------------------------------------------------------------------
 Version: 2.0.5
+Date: 4 October 2023
   Features:
     - Added mod setting to disable oversized icons on belts
     - Added mod setting to change number of module slots in containerization machines
