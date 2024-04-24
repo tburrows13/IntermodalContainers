@@ -197,7 +197,7 @@ function IC.generate_crates(this_item)
     {
       type = "item",
       name = IC.ITEM_PREFIX .. this_item,
-      localised_name = {"item-name.ic-container-item", items_per_crate, base_item.localised_name or {"item-name."..this_item}},
+      localised_name = {"item-name.ic-container-item", tostring(items_per_crate), base_item.localised_name or {"item-name."..this_item}},
       stack_size = IC.CRATE_STACK_SIZE,
       order = base_item.order,
       subgroup = IC.MOD_PREFIX .. (base_item.subgroup or this_item),
