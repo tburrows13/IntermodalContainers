@@ -101,6 +101,6 @@ data:extend {
     name = IC.MOD_PREFIX.."container",
     enabled = false,
     ingredients = { {"steel-plate", 8} },
-    result = IC.MOD_PREFIX.."container"
+    results = {{type="item", name=IC.MOD_PREFIX.."container", amount=1}},
   },
 }

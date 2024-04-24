@@ -220,7 +220,7 @@ function IC.generate_crates(this_item)
         {this_item, items_per_crate},
       },
       icons = loadrecipeicons,
-      result = IC.ITEM_PREFIX .. this_item,
+      results = {{type="item", name=IC.ITEM_PREFIX .. this_item, amount=1}},
       energy_required = items_per_crate / IC.BELT_SPEED,
       allow_decomposition = false,
       allow_intermediates = false,
@@ -242,8 +242,8 @@ function IC.generate_crates(this_item)
       },
       icons = unloadrecipeicons,
       results = {
-        {type = "item", name = IC.MOD_PREFIX.."container", amount = 1, probability = 1 - IC.UNLOADING_LOSS_RATE},
-        {this_item, items_per_crate},
+        {type="item", name=IC.MOD_PREFIX.."container", amount=1, probability=1 - IC.UNLOADING_LOSS_RATE},
+        {type="item", name=this_item, amount=items_per_crate},
       },
       energy_required = items_per_crate / IC.BELT_SPEED,
       allow_decomposition = false,
@@ -628,7 +628,7 @@ function IC.create_machine_recipe(tier, ingredients, localised_name)
       localised_name = localised_name,
       enabled = false,
       ingredients = ingredients,
-      result = IC.ENTITY_PREFIX .. tier,
+      results = {{type="item", name=IC.ENTITY_PREFIX .. tier, amount=1}},
       energy_required = 3.0,
     }
   })
