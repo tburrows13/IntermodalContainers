@@ -2,7 +2,7 @@ local IC = require "prototypes.shared"
 
 if mods["boblogistics"] and mods["boblibrary"] then
   -- IC's recipe and technology
-  bobmods.lib.recipe.replace_ingredient(IC.ENTITY_PREFIX.."1", "stack-inserter", "red-stack-inserter")
+  bobmods.lib.recipe.replace_ingredient(IC.ENTITY_PREFIX.."1", "bulk-inserter", "red-stack-inserter")
   bobmods.lib.tech.add_prerequisite(IC.TECH_PREFIX.."1", "engine")
   bobmods.lib.tech.add_prerequisite(IC.TECH_PREFIX.."3", "logistics-3")
   data.raw["assembling-machine"][IC.ENTITY_PREFIX.."3"].next_upgrade = IC.ENTITY_PREFIX.."4"

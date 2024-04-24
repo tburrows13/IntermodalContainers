@@ -53,22 +53,22 @@ IC.TECH_PREFIX   = IC.MOD_PREFIX.."containerization-"
 
 -- research prerequisites per tier
 IC.TECH_PREREQUISITES = {
-  [1] = {"automation","stack-inserter"},
+  [1] = {"automation", "bulk-inserter"},
   [2] = {"automation-2", IC.TECH_PREFIX.."1"},
   [3] = {"automation-3", "logistics-3", IC.TECH_PREFIX.."2"},
 }
 
 -- copy and multiply research cost per tier from these vanilla techs
 IC.TECH_BASE = {
-  [1] = "stack-inserter",
+  [1] = "bulk-inserter",
   [2] = "inserter-capacity-bonus-3",
   [3] = "inserter-capacity-bonus-5",
 }
 
 IC.TECH_BASE_FALLBACK = {  -- Seperated And Infinite Inserter Capacity Research mod removes other techs
   [1] = nil,
-  [2] = "stack-inserter-capacity-bonus-2",
-  [3] = "stack-inserter-capacity-bonus-3",
+  [2] = "bulk-inserter-capacity-bonus-2",
+  [3] = "bulk-inserter-capacity-bonus-3",
 }
 
 IC.TECH_COUNT_FALLBACK = {

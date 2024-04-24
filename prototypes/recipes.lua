@@ -3,14 +3,14 @@ local IC = require "prototypes.shared"
 -- the machines
 IC.create_machine_recipe(1, {
 	{"engine-unit", 4},
-	{"stack-inserter", 1},
+	{"bulk-inserter", 1},
 	{"steel-plate", 20},
 })
 
 IC.create_machine_recipe(2, {
 	{IC.ENTITY_PREFIX.."1", 1},
 	{"electric-engine-unit", 2},
-	{"stack-inserter", 2},
+	{"bulk-inserter", 2},
 	{"steel-plate", 30},
 })
 
