@@ -422,7 +422,7 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
       type = "electric",
       usage_priority = "secondary-input",
       drain = drain,
-      emissions_per_minute = pollution,
+      emissions_per_minute = { pollution = pollution },
     },
     dying_explosion = "medium-explosion",
     resistances = {
