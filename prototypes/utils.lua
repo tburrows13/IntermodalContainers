@@ -118,8 +118,8 @@ local function get_item_icon(item)
   elseif item.icon then
     table.insert(icons, {
       icon = item.icon,
-      scale = 64 / item.icon_size, -- Base layer is 64 pixels, need to ensure scaling of the crated item is correct for its size
-      icon_size = item.icon_size,
+      scale = 64 / (item.icon_size or 64), -- Base layer is 64 pixels, need to ensure scaling of the crated item is correct for its size
+      icon_size = item.icon_size or 64,
       icon_mipmaps = item.icon_mipmaps,
     })
   else
