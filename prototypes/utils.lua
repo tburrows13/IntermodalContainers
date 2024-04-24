@@ -134,9 +134,6 @@ local function recipe_is_enabled(recipe_name)
   local recipe = data.raw.recipe[recipe_name]
   if not recipe then return nil end
   if recipe.enabled ~= nil then return recipe.enabled end
-  if (recipe.normal and recipe.normal.enabled ~= nil) or (recipe.expensive and recipe.expensive.enabled ~= nil) then 
-    return (recipe.normal and recipe.normal.enabled == true) or (recipe.expensive and recipe.expensive.enabled == true)
-  end
   -- if nothing is set then recipe is enabled by default
   return true
 end
@@ -147,36 +144,12 @@ end
 local function get_recipe_from_item(item_name)
   local recipes = {}
   for ___, recipe in pairs(data.raw.recipe) do
-    local flag = false
     -- recipe
-    if not flag and recipe.result and recipe.result == item_name then flag = true end
-    if not flag and recipe.results then
+    if recipe.results then
       for ___, result in pairs(recipe.results) do
-        if result.name and result.name == item_name then flag = true end
-        if result[1] and result[1] == item_name then flag = true end
+        if result.name and result.name == item_name then recipes[recipe.name] = true end
       end
     end
-    -- recipe.normal
-    if not flag and recipe.normal then
-      if recipe.normal.result and recipe.normal.result == item_name then flag = true end
-      if recipe.normal.results then
-        for ___, result in pairs(recipe.normal.results) do
-          if result.name and result.name == item_name then flag = true end
-          if result[1] and result[1] == item_name then flag = true end
-        end
-      end
-    end
-    -- recipe.expensive
-    if not flag and recipe.expensive then
-      if recipe.expensive.result and recipe.expensive.result == item_name then flag = true end
-      if recipe.expensive.results then
-        for ___, result in pairs(recipe.expensive.results) do
-          if result.name and result.name == item_name then flag = true end
-          if result[1] and result[1] == item_name then flag = true end
-        end
-      end
-    end
-    if flag then recipes[recipe.name] = true end
   end
   return map_to_list(recipes)
 end
@@ -187,26 +160,12 @@ end
 local function get_technology_from_recipe(recipe_name)
   local technologies = {}
   for ___, tech in pairs(data.raw.technology) do
-    local flag = false
     -- effects
-    if not flag and tech.effects then
+    if tech.effects then
       for ___, effect in pairs(tech.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true end
+        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then technologies[tech.name] = true end
       end
     end
-    -- normal.effects
-    if not flag and tech.normal and tech.normal.effects then
-      for ___, effect in pairs(tech.normal.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true end
-      end
-    end
-    -- expensive.effects
-    if not flag and tech.expensive and tech.expensive.effects then
-      for ___, effect in pairs(tech.expensive.effects) do
-        if effect.type == "unlock-recipe" and effect.recipe == recipe_name then flag = true end
-      end
-    end
-    if flag then technologies[tech.name] = true end
   end
   return map_to_list(technologies)
 end
@@ -270,19 +229,12 @@ end
 -- does a recipe reference an item in its ingredients?
 local function uses_item_as_ingredient(recipe, item)
   if recipe.ingredients and product_prototype_uses_item(recipe.ingredients, item) then return true end
-  if recipe.normal and recipe.normal.ingredients and product_prototype_uses_item(recipe.normal.ingredients, item) then return true end
-  if recipe.expensive and recipe.expensive.ingredients and product_prototype_uses_item(recipe.expensive.ingredients, item) then return true end
   return false
 end
 
 -- does a recipe reference an item in its results?
 local function uses_item_as_result(recipe, item)
-  if recipe.result == item then return true end
-  if recipe.normal and recipe.normal.result == item then return true end
-  if recipe.expensive and recipe.expensive.result == item then return true end
   if recipe.results and product_prototype_uses_item(recipe.results, item) then return true end
-  if recipe.normal and recipe.normal.results and product_prototype_uses_item(recipe.normal.results, item) then return true end
-  if recipe.expensive and recipe.expensive.results and product_prototype_uses_item(recipe.expensive.results, item) then return true end
   return false
 end
 
