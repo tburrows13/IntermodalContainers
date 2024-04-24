@@ -28,13 +28,14 @@ data:extend({
     name = IC.MOD_PREFIX .. "containers",
     order = "y-0",
     type = "item-group",
-    icon_size = 128,
     icons = {
       {
-        icon = IC.P_G_ICONS .. "square/crating-icon-base-128.png"
+        icon = IC.P_G_ICONS .. "square/crating-icon-base-128.png",
+        icon_size = 128,
       },
       {
         icon = IC.P_G_ICONS .. "square/crating-icon-mask-128.png",
+        icon_size = 128,
         tint = IC.TIER_COLOURS[1]
       },
     },
@@ -43,20 +44,21 @@ data:extend({
     name = IC.LOAD_PREFIX .. "container",
     order = "y-1",
     type = "item-group",
-    icon_size = 128,
     icons = {
     {
-      icon = IC.P_G_ICONS .. "square/crating-icon-base-128.png"
+      icon = IC.P_G_ICONS .. "square/crating-icon-base-128.png",
+      icon_size = 128,
     },
     {
       icon = IC.P_G_ICONS .. "square/crating-icon-mask-128.png",
+      icon_size = 128,
       tint = IC.TIER_COLOURS[1]
     },
     {
       icon = IC.P_G_ICONS .. "arrow/arrow.png",
       icon_size = 64,
       icon_mipmaps = 1,
-      scale = 1.6,
+      scale = 0.8,
       shift = {0, 0}
     }
     },
@@ -66,20 +68,21 @@ data:extend({
     name = IC.UNLOAD_PREFIX .. "container",
     order = "y-2",
     type = "item-group",
-    icon_size = 128,
     icons = {
     {
-      icon = IC.P_G_ICONS .. "square/crating-icon-base-128.png"
+      icon = IC.P_G_ICONS .. "square/crating-icon-base-128.png",
+      icon_size = 128,
     },
     {
       icon = IC.P_G_ICONS .. "square/crating-icon-mask-128.png",
+      icon_size = 128,
       tint = IC.TIER_COLOURS[1]
     },
     {
       icon = IC.P_G_ICONS .. "arrow/arrow-up.png",
       icon_size = 64,
       icon_mipmaps = 1,
-      scale = 1.6,
+      scale = 0.8,
       shift = {0, 0}
     }
     },

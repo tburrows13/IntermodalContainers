@@ -667,10 +667,9 @@ function IC.create_crating_technology(tier, colour, prerequisites, unit)
       prerequisites = prerequisites,
       unit = unit,
       icons = {
-        { icon = IC.P_G_ICONS  .. "square/crating-icon-base-128.png" },
-        { icon = IC.P_G_ICONS  .. "square/crating-icon-mask-128.png", tint = colour },
+        { icon = IC.P_G_ICONS  .. "square/crating-icon-base-128.png", icon_size = 128 },
+        { icon = IC.P_G_ICONS  .. "square/crating-icon-mask-128.png", icon_size = 128, tint = colour },
       },
-      icon_size = 128,
       order = order,
       effects = {
         {
