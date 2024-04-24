@@ -201,7 +201,6 @@ function IC.generate_crates(this_item)
       stack_size = IC.CRATE_STACK_SIZE,
       order = base_item.order,
       subgroup = IC.MOD_PREFIX .. (base_item.subgroup or this_item),
-      allow_decomposition = false,
       icons = containeritemicons,
       pictures = { layers = containeritemlayers },
       flags = {},
@@ -437,108 +436,67 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
       "placeable-player",
       "player-creation"
     },
-    collision_box = { {-1.3,-1.3}, {1.3,1.3} },
+    collision_box = { {-1.25,-1.25}, {1.25,1.25} },
     selection_box = { {-1.5,-1.5}, {1.5,1.5} },
     tile_width = 3,
     tile_height = 3,
-    animation = {
-      layers = {
-        {
-          hr_version = {
-            filename = IC.P_G_ENTITY .. "high/crating-base.png",
+    graphics_set = {
+      animation = {
+        layers = {
+          {
+            filename = IC.P_G_ENTITY .. "crating-base.png",
             animation_speed = 1 / speed,
             priority = "high",
             frame_count = 60,
             line_length = 10,
+            width = 192,
             height = 192,
-            scale = 0.5,
             shift = {0, 0},
-            width = 192
+            scale = 0.5,
           },
-          filename = IC.P_G_ENTITY .. "low/crating-base.png",
-          animation_speed = 1 / speed,
-          priority = "high",
-          frame_count = 60,
-          line_length = 10,
-          height = 96,
-          scale = 1,
-          shift = {0, 0},
-          width = 96
-        },
-        {
-          hr_version = {
-            filename = IC.P_G_ENTITY .. "high/crating-mask.png",
+          {
+            filename = IC.P_G_ENTITY .. "crating-mask.png",
             animation_speed = 1 / speed,
             priority = "high",
             repeat_count = 60,
-            height = 192,
-            scale = 0.5,
-            shift = {0, 0},
             width = 192,
+            height = 192,
+            shift = {0, 0},
+            scale = 0.5,
             tint = colour
           },
-          filename = IC.P_G_ENTITY .. "low/crating-mask.png",
-          animation_speed = 1 / speed,
-          priority = "high",
-          repeat_count = 60,
-          height = 96,
-          scale = 1,
-          shift = {0, 0},
-          width = 96,
-          tint = colour,
-        },
-        {
-          hr_version = {
+          {
             draw_as_shadow = true,
-            filename = IC.P_G_ENTITY .. "high/crating-shadow.png",
+            filename = IC.P_G_ENTITY .. "crating-shadow.png",
             animation_speed = 1 / speed,
             repeat_count = 60,
+            width = 384,
             height = 192,
-            scale = 0.5,
             shift = {1.5, 0},
-            width = 384
-          },
-          draw_as_shadow = true,
-          filename = IC.P_G_ENTITY .. "low/crating-shadow.png",
-          animation_speed = 1 / speed,
-          repeat_count = 60,
-          height = 96,
-          scale = 1,
-          shift = {1.5, 0},
-          width = 192
+            scale = 0.5,
+          }
         }
-      }
-    },
-    working_visualisations = {
-      {
-        animation = {
-          hr_version = {
+      },
+      working_visualisations = {
+        {
+          animation = {
             animation_speed = 1 / speed,
             blend_mode = "additive",
-            filename = IC.P_G_ENTITY .. "high/crating-working.png",
+            filename = IC.P_G_ENTITY .. "crating-working.png",
+            priority = "high",
             frame_count = 30,
             line_length = 10,
+            width = 192,
             height = 192,
-            priority = "high",
             scale = 0.5,
             tint = utils.brighter_colour(colour),
-            width = 192
           },
-          animation_speed = 1 / speed,
-          blend_mode = "additive",
-          filename = IC.P_G_ENTITY .. "low/crating-working.png",
-          frame_count = 30,
-          line_length = 10,
-          height = 96,
-          priority = "high",
-          tint = utils.brighter_colour(colour),
-          width = 96
-        },
-        light = {
-          color = utils.brighter_colour(colour),
-          intensity = 0.4,
-          size = 9,
-          shift = {0, 0},
+          light = {
+            color = utils.brighter_colour(colour),
+            intensity = 0.4,
+            size = 9,
+            shift = {0, 0},
+          },
         },
       },
     },
@@ -554,10 +512,7 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
     mined_sound = {
       filename = "__base__/sound/deconstruct-bricks.ogg"
     },
-    vehicle_impact_sound = {
-      filename = "__base__/sound/car-metal-impact.ogg",
-      volume = 0.65
-    },
+    impact_category = "metal",
     se_allow_in_space = true,
   }
 
@@ -568,18 +523,13 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
     machine.tile_height = 4
     machine.collision_box = utils.scale_box(machine.collision_box, SCALE)
     machine.selection_box = utils.scale_box(machine.selection_box, SCALE)
-    machine.animation.layers[1].scale = 1 * SCALE
-    machine.animation.layers[1].hr_version.scale = 0.5 * SCALE
-    machine.animation.layers[2].scale = 1 * SCALE
-    machine.animation.layers[2].hr_version.scale = 0.5 * SCALE
-    machine.animation.layers[3].scale = 1 * SCALE
-    machine.animation.layers[3].hr_version.scale = 0.5 * SCALE
-    machine.animation.layers[3].shift = utils.scale_pos(machine.animation.layers[3].shift, SCALE)
-    machine.animation.layers[3].hr_version.shift = utils.scale_pos(machine.animation.layers[3].hr_version.shift, SCALE)
-    machine.working_visualisations[1].animation.scale = 1 * SCALE
-    machine.working_visualisations[1].animation.hr_version.scale = 0.5 * SCALE
-    machine.working_visualisations[1].light.scale = 0.5 * SCALE
-    machine.scale_entity_info_icon = true
+    machine.graphics_set.animation.layers[1].scale = 0.5 * SCALE
+    machine.graphics_set.animation.layers[2].scale = 0.5 * SCALE
+    machine.graphics_set.animation.layers[3].scale = 0.5 * SCALE
+    machine.graphics_set.animation.layers[3].shift = utils.scale_pos(machine.graphics_set.animation.layers[3].shift, SCALE)
+    machine.graphics_set.working_visualisations[1].animation.scale = 0.5 * SCALE
+    machine.graphics_set.working_visualisations[1].light.size = machine.graphics_set.working_visualisations[1].light.size * SCALE
+    --machine.icon_draw_specification = {scale = 1.2}
   end
   data:extend({machine})
 end
