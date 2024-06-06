@@ -25,6 +25,7 @@ local banned_items = {
   ["ee-super-fuel"] = true,  -- Editor Extensions
   ["bpsb-sbt-water"] = true,  -- Blueprint Sandboxes
   ["belt-sorter-everythingelse"] = true, -- Belt Sorter
+  ["kj_compatibility"] = true,  -- King Jo's mods
 }
 
 local function allowed_in_container(prototype)
