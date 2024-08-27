@@ -14,6 +14,8 @@
         "(?) bzgas",
         "(?) EndgameCombat",
         "(?) pypostprocessing",
+        "(?) IndustrialRevolution3",
+        "(?) IndustrialRevolution3LoadersStacking",
         "! DeadlockCrating"
     ],
     "description": "Load items into containers to boost belt throughput and train loading speeds.\nDeveloped from Deadlock's Crating Machine.",
