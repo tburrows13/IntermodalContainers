@@ -8,7 +8,7 @@ end
 data:extend{
   {
     type = "item",
-    name = IC.MOD_PREFIX .. "container",
+    name = "ic-container",
     icon = IC.P_G_ICONS .. "container/container.png",
     icon_size = 64, icon_mipmaps = 1,
     subgroup = "intermediate-product",

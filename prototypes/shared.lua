@@ -44,12 +44,11 @@ IC.TIER_COLOURS = {
 IC.DEFAULT_COLOUR = {r=1.0, g=0.75, b=0.75}
 
 -- prefixes
-IC.MOD_PREFIX    = "ic-"
-IC.ITEM_PREFIX   = IC.MOD_PREFIX.."container-"
-IC.LOAD_PREFIX   = IC.MOD_PREFIX.."load-"
-IC.UNLOAD_PREFIX = IC.MOD_PREFIX.."unload-"
-IC.ENTITY_PREFIX = IC.MOD_PREFIX.."containerization-machine-"
-IC.TECH_PREFIX   = IC.MOD_PREFIX.."containerization-"
+IC.ITEM_PREFIX   = "ic-container-"
+IC.LOAD_PREFIX   = "ic-load-"
+IC.UNLOAD_PREFIX = "ic-unload-"
+IC.ENTITY_PREFIX = "ic-containerization-machine-"
+IC.TECH_PREFIX   = "ic-containerization-"
 
 -- research prerequisites per tier
 IC.TECH_PREREQUISITES = {
@@ -200,7 +199,7 @@ function IC.generate_crates(this_item)
       localised_name = {"item-name.ic-container-item", tostring(items_per_crate), base_item.localised_name or {"item-name."..this_item}},
       stack_size = IC.CRATE_STACK_SIZE,
       order = base_item.order,
-      subgroup = IC.MOD_PREFIX .. (base_item.subgroup or this_item),
+      subgroup = "ic-" .. (base_item.subgroup or this_item),
       icons = containeritemicons,
       pictures = { layers = containeritemlayers },
       flags = {},
@@ -215,7 +214,7 @@ function IC.generate_crates(this_item)
       subgroup = IC.LOAD_PREFIX .. (base_item.subgroup or this_item),
       enabled = true,
       ingredients = {
-        {type="item", name=IC.MOD_PREFIX.."container", amount=1},
+        {type="item", name="ic-container", amount=1},
         {type="item", name=this_item, amount=items_per_crate},
       },
       icons = loadrecipeicons,
@@ -241,7 +240,7 @@ function IC.generate_crates(this_item)
       },
       icons = unloadrecipeicons,
       results = {
-        {type="item", name=IC.MOD_PREFIX.."container", amount=1, probability=1 - IC.UNLOADING_LOSS_RATE},
+        {type="item", name="ic-container", amount=1, probability=1 - IC.UNLOADING_LOSS_RATE},
         {type="item", name=this_item, amount=items_per_crate},
       },
       energy_required = items_per_crate / IC.BELT_SPEED,

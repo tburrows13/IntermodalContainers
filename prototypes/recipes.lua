@@ -25,7 +25,7 @@ IC.create_machine_recipe(3, {
 data:extend({
   -- Pack Group
   {
-    name = IC.MOD_PREFIX .. "containers",
+    name = "ic-containers",
     order = "y-0",
     type = "item-group",
     icons = {
@@ -101,9 +101,9 @@ data:extend {
 data:extend { 
   {
     type = "recipe",
-    name = IC.MOD_PREFIX.."container",
+    name = "ic-container",
     enabled = false,
     ingredients = {{type="item", name="steel-plate", amount=8}},
-    results = {{type="item", name=IC.MOD_PREFIX.."container", amount=1}},
+    results = {{type="item", name="ic-container", amount=1}},
   },
 }

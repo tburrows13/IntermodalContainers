@@ -7,5 +7,5 @@ end
 
 table.insert(data.raw.technology[IC.TECH_PREFIX.."1"].effects, {
   type = "unlock-recipe",
-  recipe = IC.MOD_PREFIX.."container",
+  recipe = "ic-container",
 })
