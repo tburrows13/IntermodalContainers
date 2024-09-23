@@ -262,8 +262,8 @@ local function get_energy_table(this_tier, tiers, lowest, highest, passive_multi
   local passive_energy_usage = total * passive_multiplier
   local active_energy_usage = total * (1 - passive_multiplier)
   return {
-    passive = passive_energy_usage .. "KW", -- passive energy drain as a string
-    active = active_energy_usage .. "KW", -- active energy usage as a string
+    passive = passive_energy_usage .. "kW", -- passive energy drain as a string
+    active = active_energy_usage .. "kW", -- active energy usage as a string
   }
 end
 
