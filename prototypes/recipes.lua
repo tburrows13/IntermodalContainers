@@ -2,23 +2,23 @@ local IC = require "prototypes.shared"
 
 -- the machines
 IC.create_machine_recipe(1, {
-	{"engine-unit", 4},
-	{"bulk-inserter", 1},
-	{"steel-plate", 20},
+	{type="item", name="engine-unit", amount=4},
+	{type="item", name="bulk-inserter", amount=1},
+	{type="item", name="steel-plate", amount=20},
 })
 
 IC.create_machine_recipe(2, {
-	{IC.ENTITY_PREFIX.."1", 1},
-	{"electric-engine-unit", 2},
-	{"bulk-inserter", 2},
-	{"steel-plate", 30},
+	{type="item", name=IC.ENTITY_PREFIX.."1", amount=1},
+	{type="item", name="electric-engine-unit", amount=2},
+	{type="item", name="bulk-inserter", amount=2},
+	{type="item", name="steel-plate", amount=30},
 })
 
 IC.create_machine_recipe(3, {
-	{IC.ENTITY_PREFIX.."2", 1},
-  {"electric-engine-unit", 8},
-  {"advanced-circuit", 8},
-	{"steel-plate", 40},
+	{type="item", name=IC.ENTITY_PREFIX.."2", amount=1},
+  {type="item", name="electric-engine-unit", amount=8},
+  {type="item", name="advanced-circuit", amount=8},
+	{type="item", name="steel-plate", amount=40},
 })
 
 -- crafting tab groups
@@ -103,7 +103,7 @@ data:extend {
     type = "recipe",
     name = IC.MOD_PREFIX.."container",
     enabled = false,
-    ingredients = { {"steel-plate", 8} },
+    ingredients = {{type="item", name="steel-plate", amount=8}},
     results = {{type="item", name=IC.MOD_PREFIX.."container", amount=1}},
   },
 }

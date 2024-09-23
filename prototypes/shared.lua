@@ -215,8 +215,8 @@ function IC.generate_crates(this_item)
       subgroup = IC.LOAD_PREFIX .. (base_item.subgroup or this_item),
       enabled = true,
       ingredients = {
-        {IC.MOD_PREFIX.."container", 1},
-        {this_item, items_per_crate},
+        {type="item", name=IC.MOD_PREFIX.."container", amount=1},
+        {type="item", name=this_item, amount=items_per_crate},
       },
       icons = loadrecipeicons,
       results = {{type="item", name=IC.ITEM_PREFIX .. this_item, amount=1}},
@@ -237,7 +237,7 @@ function IC.generate_crates(this_item)
       subgroup = IC.UNLOAD_PREFIX .. (base_item.subgroup or this_item),
       enabled = true,
       ingredients = {
-        {IC.ITEM_PREFIX .. this_item, 1},
+        {type="item", name=IC.ITEM_PREFIX .. this_item, amount=1},
       },
       icons = unloadrecipeicons,
       results = {
