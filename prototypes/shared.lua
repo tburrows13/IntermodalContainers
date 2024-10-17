@@ -514,8 +514,12 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
     impact_category = "metal",
     se_allow_in_space = true,
   }
+  if settings.startup["ic-machine-size"].value == "3×4" then
+    machine.tile_width = 4
+    machine.collision_box = { {-1.66,-1.25}, {1.66,1.25} }
+    machine.selection_box = { {-2,-1.5}, {2,1.5} }
 
-  if settings.startup["ic-machine-size"].value == "4×4" then
+  elseif settings.startup["ic-machine-size"].value == "4×4" then
     local SCALE = 4/3 --1.33333
 
     machine.tile_width = 4
