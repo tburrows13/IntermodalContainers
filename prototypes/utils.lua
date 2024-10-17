@@ -85,17 +85,8 @@ end
 -- get ItemPrototype from item name
 -- @ item_name: String
 local function get_item_prototype(item_name)
-  -- list of base item prototypes to pick from
-  local ITEM_TYPES = {
-    "item",
-    "ammo",
-    "capsule",
-    "module",
-    "tool",
-    "repair-tool",
-  }
-  for _, item_type in pairs(ITEM_TYPES) do
-    if data.raw[item_type][item_name] then 
+  for item_type, _ in pairs(defines.prototypes.item) do
+    if data.raw[item_type] and data.raw[item_type][item_name] then
       return data.raw[item_type][item_name]
     end
   end
