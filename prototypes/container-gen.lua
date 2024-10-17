@@ -34,13 +34,17 @@ local function allowed_in_container(prototype)
   if prototype.ic_create_container == false then return false end
   if banned_items[prototype.name] then return false end
   if prototype.place_result then return false end
-  if prototype.placed_as_equipment_result then return false end
+  if prototype.place_as_equipment_result then return false end
   --if prototype.place_as_tile then return false end
   if prototype.subgroup == "barrel" then return false end
-  if utils.is_value_in_table(prototype.flags, "hidden") then return false end
+  if prototype.parameter then return false end
+  if prototype.hidden then return false end
   if utils.is_value_in_table(prototype.flags, "only-in-cursor") then return false end
   if utils.is_value_in_table(prototype.flags, "spawnable") then return false end
   if utils.is_value_in_table(prototype.flags, "not-stackable") then return false end
+  if prototype.spoil_result then return false end
+  if prototype.spoil_ticks then return false end
+  if prototype.spoil_to_trigger_result then return false end
   return true
 end
 

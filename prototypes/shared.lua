@@ -44,31 +44,30 @@ IC.TIER_COLOURS = {
 IC.DEFAULT_COLOUR = {r=1.0, g=0.75, b=0.75}
 
 -- prefixes
-IC.MOD_PREFIX    = "ic-"
-IC.ITEM_PREFIX   = IC.MOD_PREFIX.."container-"
-IC.LOAD_PREFIX   = IC.MOD_PREFIX.."load-"
-IC.UNLOAD_PREFIX = IC.MOD_PREFIX.."unload-"
-IC.ENTITY_PREFIX = IC.MOD_PREFIX.."containerization-machine-"
-IC.TECH_PREFIX   = IC.MOD_PREFIX.."containerization-"
+IC.ITEM_PREFIX   = "ic-container-"
+IC.LOAD_PREFIX   = "ic-load-"
+IC.UNLOAD_PREFIX = "ic-unload-"
+IC.ENTITY_PREFIX = "ic-containerization-machine-"
+IC.TECH_PREFIX   = "ic-containerization-"
 
 -- research prerequisites per tier
 IC.TECH_PREREQUISITES = {
-  [1] = {"automation","stack-inserter"},
+  [1] = {"automation", "bulk-inserter"},
   [2] = {"automation-2", IC.TECH_PREFIX.."1"},
   [3] = {"automation-3", "logistics-3", IC.TECH_PREFIX.."2"},
 }
 
 -- copy and multiply research cost per tier from these vanilla techs
 IC.TECH_BASE = {
-  [1] = "stack-inserter",
+  [1] = "bulk-inserter",
   [2] = "inserter-capacity-bonus-3",
   [3] = "inserter-capacity-bonus-5",
 }
 
 IC.TECH_BASE_FALLBACK = {  -- Seperated And Infinite Inserter Capacity Research mod removes other techs
   [1] = nil,
-  [2] = "stack-inserter-capacity-bonus-2",
-  [3] = "stack-inserter-capacity-bonus-3",
+  [2] = "bulk-inserter-capacity-bonus-2",
+  [3] = "bulk-inserter-capacity-bonus-3",
 }
 
 IC.TECH_COUNT_FALLBACK = {
@@ -78,17 +77,15 @@ IC.TECH_COUNT_FALLBACK = {
 }
 
 IC.OVERSIZED_CONTAINERS = settings.startup["ic-container-oversized-icon"].value
-IC.CONTAINER_PICTURE_SCALE = IC.OVERSIZED_CONTAINERS and 0.8 or 0.5
+IC.CONTAINER_PICTURE_SCALE = 2*(IC.OVERSIZED_CONTAINERS and 0.8 or 0.5)
 
 IC.ICONS = {
-  ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["ARROW_DOWN"] = { icon = IC.P_G_ICONS.."arrow/arrow.png",                      icon_mipmaps = 1, icon_size = 64, scale = 0.4, shift = { 4, 1 } },
-  ["UNLOAD_BG"]  = { icon = IC.P_G_ICONS.."container/unload-background.png",      icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["CORNER_L"]   = { icon = IC.P_G_ICONS.."container/container-corner-left.png",  icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["ARROW_UP"]   = { icon = IC.P_G_ICONS.."arrow/arrow-up.png",                   icon_mipmaps = 1, icon_size = 64, scale = 0.4, shift = { -4, 0} },
-  ["CONTAINER"]  = { icon = IC.P_G_ICONS.."container/container.png",              icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["TOP_COVER"]  = { icon = IC.P_G_ICONS.."container/container-top.png",          icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
+  ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_size = 64, scale = 0.5, draw_background = true },
+  ["ARROW_DOWN"] = { icon = IC.P_G_ICONS.."arrow/arrow.png",                      icon_size = 64, scale = 0.4, shift = { 4, 1 }, draw_background = true },
+  ["CORNER_L"]   = { icon = IC.P_G_ICONS.."container/container-corner-left.png",  icon_size = 64, scale = 0.5, draw_background = true },
+  ["ARROW_UP"]   = { icon = IC.P_G_ICONS.."arrow/arrow-up.png",                   icon_size = 64, scale = 0.4, shift = { -4, 0}, draw_background = true },
+  ["CONTAINER"]  = { icon = IC.P_G_ICONS.."container/container.png",              icon_size = 64, scale = 0.5 },
+  ["TOP_COVER"]  = { icon = IC.P_G_ICONS.."container/container-top.png",          icon_size = 64, scale = 0.5 },
 }
 
 -- debug logging
@@ -109,19 +106,6 @@ function IC.get_technology_from_item(item_name)
   return default_tech
 end
 
--- Update stack size descriptions added by other mods because we run in data-final-fixes
-local function update_description_stack_size(description, stack_size)
-  if not description then return end
-  if type(description) ~= "table" then return end
-  if description[1] == "description.stack-size" or description[1] == "other.stack-size-description" then
-    -- Extended Descriptions and Stack Size Tooltip
-    description[2] = stack_size
-  end
-  for _, item in pairs(description) do
-    update_description_stack_size(item, stack_size)
-  end
-end
-
 -- generate items and recipes for crated items
 IC.CRATE_ORDER = 0
 function IC.generate_crates(this_item)
@@ -135,7 +119,6 @@ function IC.generate_crates(this_item)
   -- Adjust stack size
   if IC.STACK_SIZE_MULTIPLIER ~= 1 and base_item.stack_size >= 20 then
     base_item.stack_size = math.ceil(base_item.stack_size * IC.STACK_SIZE_MULTIPLIER)
-    update_description_stack_size(base_item.localised_description, tostring(base_item.stack_size))
   end
 
   local items_per_crate = math.ceil(base_item.stack_size * IC.MULTIPLIER)
@@ -143,6 +126,10 @@ function IC.generate_crates(this_item)
   if items_per_crate > 65535 then
     log("ABORT: IC encountered a recipe with insane stack size ("..this_item..")")
     return
+  end
+  local weight = data.raw["utility-constants"].default.default_item_weight
+  if base_item.weight then
+    weight = items_per_crate * base_item.weight
   end
   local icons = utils.get_item_icon(base_item)
   if not icons then
@@ -163,48 +150,52 @@ function IC.generate_crates(this_item)
   utils.shift_icon(containeritemicons[2], 0, -10)
   utils.shift_icon(containeritemicons[3], 0, -4.5)
   utils.shift_icon(containeritemicons[4], 0, 1)
+
+  -- layers is for pictures, i.e. on-belt and on-ground
   local containeritemlayers = table.deepcopy(containeritemicons)
   for _, layer in pairs(containeritemlayers) do
     layer.filename = layer.icon
     layer.icon = nil
     layer.size = layer.icon_size
     layer.icon_size = nil
-    layer.mipmap_count = layer.icon_mipmaps
-    layer.icon_mipmaps = nil
     layer.shift = layer.shift or {0, 0}
     layer.shift = util.by_pixel(layer.shift[1] * IC.CONTAINER_PICTURE_SCALE, layer.shift[2] * IC.CONTAINER_PICTURE_SCALE)
     layer.scale = layer.scale * IC.CONTAINER_PICTURE_SCALE
   end
+
   local loadrecipeicons = {
-    table.deepcopy(IC.ICONS.LOAD_BG),
     table.deepcopy(IC.ICONS.CORNER_R),
     table.deepcopy(icons[1]),
     table.deepcopy(IC.ICONS.ARROW_DOWN),
   }
-  utils.scale_icon(loadrecipeicons[3], 0.36)
-  utils.shift_icon(loadrecipeicons[3], -4.5, -4.5)
+  utils.scale_icon(loadrecipeicons[2], 0.36)
+  utils.shift_icon(loadrecipeicons[2], -4.5, -4.5)
+
   local unloadrecipeicons = {
-    table.deepcopy(IC.ICONS.UNLOAD_BG),
     table.deepcopy(IC.ICONS.CORNER_L),
     table.deepcopy(icons[1]),
     table.deepcopy(IC.ICONS.ARROW_UP),
   }
-  utils.scale_icon(unloadrecipeicons[3], 0.36)
-  utils.shift_icon(unloadrecipeicons[3], 4.5, -4.5)
+  utils.scale_icon(unloadrecipeicons[2], 0.36)
+  utils.shift_icon(unloadrecipeicons[2], 4.5, -4.5)
 
   data:extend({
     -- the item
     {
       type = "item",
       name = IC.ITEM_PREFIX .. this_item,
-      localised_name = {"item-name.ic-container-item", items_per_crate, base_item.localised_name or {"item-name."..this_item}},
+      localised_name = {"item-name.ic-container-item", tostring(items_per_crate), base_item.localised_name or {"item-name."..this_item}},
       stack_size = IC.CRATE_STACK_SIZE,
+      weight = weight,
       order = base_item.order,
-      subgroup = IC.MOD_PREFIX .. (base_item.subgroup or this_item),
-      allow_decomposition = false,
+      subgroup = "ic-" .. (base_item.subgroup or this_item),
       icons = containeritemicons,
       pictures = { layers = containeritemlayers },
       flags = {},
+      inventory_move_sound = item_sounds.metal_chest_inventory_move,
+      pick_sound = item_sounds.metal_chest_inventory_pickup,
+      drop_sound = item_sounds.metal_chest_inventory_move,
+      colorblind_aid = base_item.colorblind_aid,
     },
     -- The load recipe
     {
@@ -216,11 +207,11 @@ function IC.generate_crates(this_item)
       subgroup = IC.LOAD_PREFIX .. (base_item.subgroup or this_item),
       enabled = true,
       ingredients = {
-        {IC.MOD_PREFIX.."container", 1},
-        {this_item, items_per_crate},
+        {type="item", name="ic-container", amount=1},
+        {type="item", name=this_item, amount=items_per_crate},
       },
       icons = loadrecipeicons,
-      result = IC.ITEM_PREFIX .. this_item,
+      results = {{type="item", name=IC.ITEM_PREFIX .. this_item, amount=1}},
       energy_required = items_per_crate / IC.BELT_SPEED,
       allow_decomposition = false,
       allow_intermediates = false,
@@ -238,12 +229,12 @@ function IC.generate_crates(this_item)
       subgroup = IC.UNLOAD_PREFIX .. (base_item.subgroup or this_item),
       enabled = true,
       ingredients = {
-        {IC.ITEM_PREFIX .. this_item, 1},
+        {type="item", name=IC.ITEM_PREFIX .. this_item, amount=1},
       },
       icons = unloadrecipeicons,
       results = {
-        {type = "item", name = IC.MOD_PREFIX.."container", amount = 1, probability = 1 - IC.UNLOADING_LOSS_RATE},
-        {this_item, items_per_crate},
+        {type="item", name="ic-container", amount=1, probability=1 - IC.UNLOADING_LOSS_RATE},
+        {type="item", name=this_item, amount=items_per_crate},
       },
       energy_required = items_per_crate / IC.BELT_SPEED,
       allow_decomposition = false,
@@ -401,8 +392,8 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
     next_upgrade = upgrade,
     fast_replaceable_group = "crating-machine",
     icons = {
-      { icon = IC.P_G_ICONS .. "mipmaps/crating-icon-base.png", icon_size = IC.ITEM_ICON_SIZE, icon_mipmaps = 4 },
-      { icon = IC.P_G_ICONS .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour, icon_mipmaps = 4 },
+      { icon = IC.P_G_ICONS .. "mipmaps/crating-icon-base.png", icon_size = IC.ITEM_ICON_SIZE},
+      { icon = IC.P_G_ICONS .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour },
     },
     minable = {
       mining_time = 0.5,
@@ -422,7 +413,7 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
       type = "electric",
       usage_priority = "secondary-input",
       drain = drain,
-      emissions_per_minute = pollution,
+      emissions_per_minute = { pollution = pollution },
     },
     dying_explosion = "medium-explosion",
     resistances = {
@@ -437,108 +428,67 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
       "placeable-player",
       "player-creation"
     },
-    collision_box = { {-1.3,-1.3}, {1.3,1.3} },
+    collision_box = { {-1.25,-1.25}, {1.25,1.25} },
     selection_box = { {-1.5,-1.5}, {1.5,1.5} },
     tile_width = 3,
     tile_height = 3,
-    animation = {
-      layers = {
-        {
-          hr_version = {
-            filename = IC.P_G_ENTITY .. "high/crating-base.png",
+    graphics_set = {
+      animation = {
+        layers = {
+          {
+            filename = IC.P_G_ENTITY .. "crating-base.png",
             animation_speed = 1 / speed,
             priority = "high",
             frame_count = 60,
             line_length = 10,
+            width = 192,
             height = 192,
-            scale = 0.5,
             shift = {0, 0},
-            width = 192
+            scale = 0.5,
           },
-          filename = IC.P_G_ENTITY .. "low/crating-base.png",
-          animation_speed = 1 / speed,
-          priority = "high",
-          frame_count = 60,
-          line_length = 10,
-          height = 96,
-          scale = 1,
-          shift = {0, 0},
-          width = 96
-        },
-        {
-          hr_version = {
-            filename = IC.P_G_ENTITY .. "high/crating-mask.png",
+          {
+            filename = IC.P_G_ENTITY .. "crating-mask.png",
             animation_speed = 1 / speed,
             priority = "high",
             repeat_count = 60,
-            height = 192,
-            scale = 0.5,
-            shift = {0, 0},
             width = 192,
+            height = 192,
+            shift = {0, 0},
+            scale = 0.5,
             tint = colour
           },
-          filename = IC.P_G_ENTITY .. "low/crating-mask.png",
-          animation_speed = 1 / speed,
-          priority = "high",
-          repeat_count = 60,
-          height = 96,
-          scale = 1,
-          shift = {0, 0},
-          width = 96,
-          tint = colour,
-        },
-        {
-          hr_version = {
+          {
             draw_as_shadow = true,
-            filename = IC.P_G_ENTITY .. "high/crating-shadow.png",
+            filename = IC.P_G_ENTITY .. "crating-shadow.png",
             animation_speed = 1 / speed,
             repeat_count = 60,
+            width = 384,
             height = 192,
-            scale = 0.5,
             shift = {1.5, 0},
-            width = 384
-          },
-          draw_as_shadow = true,
-          filename = IC.P_G_ENTITY .. "low/crating-shadow.png",
-          animation_speed = 1 / speed,
-          repeat_count = 60,
-          height = 96,
-          scale = 1,
-          shift = {1.5, 0},
-          width = 192
+            scale = 0.5,
+          }
         }
-      }
-    },
-    working_visualisations = {
-      {
-        animation = {
-          hr_version = {
+      },
+      working_visualisations = {
+        {
+          animation = {
             animation_speed = 1 / speed,
             blend_mode = "additive",
-            filename = IC.P_G_ENTITY .. "high/crating-working.png",
+            filename = IC.P_G_ENTITY .. "crating-working.png",
+            priority = "high",
             frame_count = 30,
             line_length = 10,
+            width = 192,
             height = 192,
-            priority = "high",
             scale = 0.5,
             tint = utils.brighter_colour(colour),
-            width = 192
           },
-          animation_speed = 1 / speed,
-          blend_mode = "additive",
-          filename = IC.P_G_ENTITY .. "low/crating-working.png",
-          frame_count = 30,
-          line_length = 10,
-          height = 96,
-          priority = "high",
-          tint = utils.brighter_colour(colour),
-          width = 96
-        },
-        light = {
-          color = utils.brighter_colour(colour),
-          intensity = 0.4,
-          size = 9,
-          shift = {0, 0},
+          light = {
+            color = utils.brighter_colour(colour),
+            intensity = 0.4,
+            size = 9,
+            shift = {0, 0},
+          },
         },
       },
     },
@@ -554,32 +504,28 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
     mined_sound = {
       filename = "__base__/sound/deconstruct-bricks.ogg"
     },
-    vehicle_impact_sound = {
-      filename = "__base__/sound/car-metal-impact.ogg",
-      volume = 0.65
-    },
+    impact_category = "metal",
     se_allow_in_space = true,
   }
+  if settings.startup["ic-machine-size"].value == "3×4" then
+    machine.tile_width = 4
+    machine.collision_box = { {-1.66,-1.25}, {1.66,1.25} }
+    machine.selection_box = { {-2,-1.5}, {2,1.5} }
 
-  if settings.startup["ic-machine-size"].value == "4×4" then
+  elseif settings.startup["ic-machine-size"].value == "4×4" then
     local SCALE = 4/3 --1.33333
 
     machine.tile_width = 4
     machine.tile_height = 4
     machine.collision_box = utils.scale_box(machine.collision_box, SCALE)
     machine.selection_box = utils.scale_box(machine.selection_box, SCALE)
-    machine.animation.layers[1].scale = 1 * SCALE
-    machine.animation.layers[1].hr_version.scale = 0.5 * SCALE
-    machine.animation.layers[2].scale = 1 * SCALE
-    machine.animation.layers[2].hr_version.scale = 0.5 * SCALE
-    machine.animation.layers[3].scale = 1 * SCALE
-    machine.animation.layers[3].hr_version.scale = 0.5 * SCALE
-    machine.animation.layers[3].shift = utils.scale_pos(machine.animation.layers[3].shift, SCALE)
-    machine.animation.layers[3].hr_version.shift = utils.scale_pos(machine.animation.layers[3].hr_version.shift, SCALE)
-    machine.working_visualisations[1].animation.scale = 1 * SCALE
-    machine.working_visualisations[1].animation.hr_version.scale = 0.5 * SCALE
-    machine.working_visualisations[1].light.scale = 0.5 * SCALE
-    machine.scale_entity_info_icon = true
+    machine.graphics_set.animation.layers[1].scale = 0.5 * SCALE
+    machine.graphics_set.animation.layers[2].scale = 0.5 * SCALE
+    machine.graphics_set.animation.layers[3].scale = 0.5 * SCALE
+    machine.graphics_set.animation.layers[3].shift = utils.scale_pos(machine.graphics_set.animation.layers[3].shift, SCALE)
+    machine.graphics_set.working_visualisations[1].animation.scale = 0.5 * SCALE
+    machine.graphics_set.working_visualisations[1].light.size = machine.graphics_set.working_visualisations[1].light.size * SCALE
+    --machine.icon_draw_specification = {scale = 1.2}
   end
   data:extend({machine})
 end
@@ -603,13 +549,16 @@ function IC.create_machine_item(tier, colour, localised_name)
       subgroup = "production-machine",
       stack_size = 50,
       icons = {
-        { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-base.png", icon_size = IC.ITEM_ICON_SIZE, icon_mipmaps = 4 },
-        { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour, icon_mipmaps = 4 },
+        { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-base.png", icon_size = IC.ITEM_ICON_SIZE },
+        { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour },
       },
       icon_size = IC.ITEM_ICON_SIZE,
       order = "d-a[".. IC.ENTITY_PREFIX .."1]-" .. order,
       place_result = IC.ENTITY_PREFIX .. tier,
       flags = {},
+      inventory_move_sound = item_sounds.mechanical_inventory_move,
+      pick_sound = item_sounds.mechanical_inventory_pickup,
+      drop_sound = item_sounds.mechanical_inventory_move,  
     }
   }
 end
@@ -628,7 +577,7 @@ function IC.create_machine_recipe(tier, ingredients, localised_name)
       localised_name = localised_name,
       enabled = false,
       ingredients = ingredients,
-      result = IC.ENTITY_PREFIX .. tier,
+      results = {{type="item", name=IC.ENTITY_PREFIX .. tier, amount=1}},
       energy_required = 3.0,
     }
   })
@@ -667,10 +616,9 @@ function IC.create_crating_technology(tier, colour, prerequisites, unit)
       prerequisites = prerequisites,
       unit = unit,
       icons = {
-        { icon = IC.P_G_ICONS  .. "square/crating-icon-base-128.png" },
-        { icon = IC.P_G_ICONS  .. "square/crating-icon-mask-128.png", tint = colour },
+        { icon = IC.P_G_ICONS  .. "square/crating-icon-base-128.png", icon_size = 128 },
+        { icon = IC.P_G_ICONS  .. "square/crating-icon-mask-128.png", icon_size = 128, tint = colour },
       },
-      icon_size = 128,
       order = order,
       effects = {
         {

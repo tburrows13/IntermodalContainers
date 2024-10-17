@@ -3,7 +3,7 @@ local handler = require "__core__.lualib.event_handler"
 local function consistency_test()
   print("Intermodal Containers: Checking recipes")
 
-  local containerisation_recipes = game.get_filtered_recipe_prototypes{{filter = "category", category = "packing"}}
+  local containerisation_recipes = prototypes.get_recipe_filtered{{filter = "category", category = "packing"}}
 
   local checked = 0
   for _, recipe in pairs(containerisation_recipes) do

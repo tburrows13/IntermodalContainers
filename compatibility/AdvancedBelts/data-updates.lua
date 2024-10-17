@@ -26,10 +26,10 @@ intermodal_containers.add_tier(
   upgrade = IC.ENTITY_PREFIX.."5",
   ingredients =
   {
-    { type = "item", name = IC.ENTITY_PREFIX.."3",  amount =  1 },
-    {"electric-engine-unit", 12},
-    {"advanced-circuit", 12},
-    {"steel-plate", 50},
+    {type="item", name=IC.ENTITY_PREFIX.."3", amount=1},
+    {type="item", name="electric-engine-unit", amount=12},
+    {type="item", name="advanced-circuit", amount=12},
+    {type="item", name="steel-plate", amount=50},
     },
   colour = {r = 7, g = 245, b = 7, a = 255},
   speed = 4,
@@ -43,10 +43,10 @@ intermodal_containers.add_tier(
   upgrade = IC.ENTITY_PREFIX.."6",
   ingredients =
   {
-    { type = "item", name = IC.ENTITY_PREFIX.."4",  amount =  1 },
-    {"electric-engine-unit", 15},
-    {"advanced-circuit", 15},
-    {"steel-plate", 60},
+    {type="item", name=IC.ENTITY_PREFIX.."4", amount=1},
+    {type="item", name="electric-engine-unit", amount=15},
+    {type="item", name="advanced-circuit", amount=15},
+    {type="item", name="steel-plate", amount=60},
     },
   colour = {r = 255, g = 113, b = 62, a = 255},
   speed = 5,
@@ -59,10 +59,10 @@ intermodal_containers.add_tier(
   tier = 6,
   ingredients =
   {
-    { type = "item", name = IC.ENTITY_PREFIX.."5",  amount =  1 },
-    {"electric-engine-unit", 20},
-    {"advanced-circuit", 20},
-    {"steel-plate", 70},
+    {type="item", name=IC.ENTITY_PREFIX.."5", amount=1},
+    {type="item", name="electric-engine-unit", amount=20},
+    {type="item", name="advanced-circuit", amount=20},
+    {type="item", name="steel-plate", amount=70},
     },
   colour = {r = 255, g = 68, b = 181, a = 231},
   speed = 6,

@@ -1,12 +1,12 @@
 local IC = require "prototypes.shared"
 -- Create item subgroups
 for name, subgroup in pairs(data.raw["item-subgroup"]) do
-  if subgroup.group ~= IC.MOD_PREFIX .. "containers" and subgroup.group ~= IC.LOAD_PREFIX .. "container" and subgroup.group ~= IC.UNLOAD_PREFIX .. "container" then
+  if subgroup.group ~= "ic-containers" and subgroup.group ~= IC.LOAD_PREFIX .. "container" and subgroup.group ~= IC.UNLOAD_PREFIX .. "container" then
     data:extend{
       {
         type  = "item-subgroup",
-        name  = IC.MOD_PREFIX .. name,
-        group = IC.MOD_PREFIX .. "containers",
+        name  = "ic-" .. name,
+        group = "ic-containers",
         order = "a[container]-" .. (subgroup.order or "unordered"),
       },
       {

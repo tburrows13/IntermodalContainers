@@ -1,5 +1,5 @@
 local function add_radioactive_items()
-  if not game.active_mods["Krastorio2"] then return end
+  if not script.active_mods["Krastorio2"] then return end
   if not (remote.interfaces["kr-radioactivity"] and remote.interfaces["kr-radioactivity"]["add_item"]) then return end
 
   local IC = "ic-container-"
@@ -19,7 +19,7 @@ local function add_radioactive_items()
     "uranium-concentrate",
     "uranium-low-enriched"
   }) do
-    if game.item_prototypes[IC..name] ~= nil then
+    if prototypes.item[IC..name] ~= nil then
       remote.call("kr-radioactivity", "add_item", IC..name)
     end
   end
@@ -27,7 +27,7 @@ end
 
 ---@param changed_data ConfigurationChangedData
 local function on_configuration_changed(changed_data)
-  if not game.active_mods["Krastorio2"] then return end
+  if not script.active_mods["Krastorio2"] then return end
 
   if changed_data.mod_changes["Krastorio2"] and changed_data.mod_changes["Krastorio2"].old_version == nil then
     add_radioactive_items()
