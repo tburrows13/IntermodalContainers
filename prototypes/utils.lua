@@ -110,16 +110,18 @@ local function get_item_icon(item)
   if item.icons then
     for _, icon in pairs(item.icons) do
       local temp_icon = table.deepcopy(icon)
-      if not temp_icon.icon_size then temp_icon.icon_size = item.icon_size end
-      temp_icon.scale = temp_icon.scale or (64 / temp_icon.icon_size)
+      --if not temp_icon.icon_size then temp_icon.icon_size = 64 end
+      --temp_icon.scale = temp_icon.scale or (64 / temp_icon.icon_size)
       table.insert(icons, temp_icon)
     end
+    icons[1].draw_background = true
   -- If no icons field, look for icon definition
   elseif item.icon then
     table.insert(icons, {
       icon = item.icon,
-      scale = 64 / (item.icon_size or 64), -- Base layer is 64 pixels, need to ensure scaling of the crated item is correct for its size
+      --scale = 64 / (item.icon_size or 64), -- Base layer is 64 pixels, need to ensure scaling of the crated item is correct for its size
       icon_size = item.icon_size or 64,
+      draw_background = true,
     })
   else
     return nil

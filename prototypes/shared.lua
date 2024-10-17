@@ -77,15 +77,13 @@ IC.TECH_COUNT_FALLBACK = {
 }
 
 IC.OVERSIZED_CONTAINERS = settings.startup["ic-container-oversized-icon"].value
-IC.CONTAINER_PICTURE_SCALE = IC.OVERSIZED_CONTAINERS and 0.8 or 0.5
+IC.CONTAINER_PICTURE_SCALE = 2*(IC.OVERSIZED_CONTAINERS and 0.8 or 0.5)
 
 IC.ICONS = {
-  ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_size = 64, scale = 0.5 },
-  ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_size = 64, scale = 0.5 },
-  ["ARROW_DOWN"] = { icon = IC.P_G_ICONS.."arrow/arrow.png",                      icon_size = 64, scale = 0.4, shift = { 4, 1 } },
-  ["UNLOAD_BG"]  = { icon = IC.P_G_ICONS.."container/unload-background.png",      icon_size = 64, scale = 0.5 },
-  ["CORNER_L"]   = { icon = IC.P_G_ICONS.."container/container-corner-left.png",  icon_size = 64, scale = 0.5 },
-  ["ARROW_UP"]   = { icon = IC.P_G_ICONS.."arrow/arrow-up.png",                   icon_size = 64, scale = 0.4, shift = { -4, 0} },
+  ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_size = 64, scale = 0.5, draw_background = true },
+  ["ARROW_DOWN"] = { icon = IC.P_G_ICONS.."arrow/arrow.png",                      icon_size = 64, scale = 0.4, shift = { 4, 1 }, draw_background = true },
+  ["CORNER_L"]   = { icon = IC.P_G_ICONS.."container/container-corner-left.png",  icon_size = 64, scale = 0.5, draw_background = true },
+  ["ARROW_UP"]   = { icon = IC.P_G_ICONS.."arrow/arrow-up.png",                   icon_size = 64, scale = 0.4, shift = { -4, 0}, draw_background = true },
   ["CONTAINER"]  = { icon = IC.P_G_ICONS.."container/container.png",              icon_size = 64, scale = 0.5 },
   ["TOP_COVER"]  = { icon = IC.P_G_ICONS.."container/container-top.png",          icon_size = 64, scale = 0.5 },
 }
@@ -162,6 +160,8 @@ function IC.generate_crates(this_item)
   utils.shift_icon(containeritemicons[2], 0, -10)
   utils.shift_icon(containeritemicons[3], 0, -4.5)
   utils.shift_icon(containeritemicons[4], 0, 1)
+
+  -- layers is for pictures, i.e. on-belt and on-ground
   local containeritemlayers = table.deepcopy(containeritemicons)
   for _, layer in pairs(containeritemlayers) do
     layer.filename = layer.icon
@@ -172,22 +172,22 @@ function IC.generate_crates(this_item)
     layer.shift = util.by_pixel(layer.shift[1] * IC.CONTAINER_PICTURE_SCALE, layer.shift[2] * IC.CONTAINER_PICTURE_SCALE)
     layer.scale = layer.scale * IC.CONTAINER_PICTURE_SCALE
   end
+
   local loadrecipeicons = {
-    table.deepcopy(IC.ICONS.LOAD_BG),
     table.deepcopy(IC.ICONS.CORNER_R),
     table.deepcopy(icons[1]),
     table.deepcopy(IC.ICONS.ARROW_DOWN),
   }
-  utils.scale_icon(loadrecipeicons[3], 0.36)
-  utils.shift_icon(loadrecipeicons[3], -4.5, -4.5)
+  utils.scale_icon(loadrecipeicons[2], 0.36)
+  utils.shift_icon(loadrecipeicons[2], -4.5, -4.5)
+
   local unloadrecipeicons = {
-    table.deepcopy(IC.ICONS.UNLOAD_BG),
     table.deepcopy(IC.ICONS.CORNER_L),
     table.deepcopy(icons[1]),
     table.deepcopy(IC.ICONS.ARROW_UP),
   }
-  utils.scale_icon(unloadrecipeicons[3], 0.36)
-  utils.shift_icon(unloadrecipeicons[3], 4.5, -4.5)
+  utils.scale_icon(unloadrecipeicons[2], 0.36)
+  utils.shift_icon(unloadrecipeicons[2], 4.5, -4.5)
 
   data:extend({
     -- the item
