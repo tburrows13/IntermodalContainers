@@ -17,5 +17,5 @@
         "! DeadlockCrating"
     ],
     "description": "Load items into containers to boost belt throughput and train loading speeds.\nDeveloped from Deadlock's Crating Machine.",
-    "factorio_version": "1.1"
+    "factorio_version": "2.0"
 }
