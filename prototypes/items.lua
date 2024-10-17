@@ -22,5 +22,8 @@ data:extend{
       scale = 0.5 * IC.CONTAINER_PICTURE_SCALE,
       },
     },
+    inventory_move_sound = item_sounds.metal_chest_inventory_move,
+    pick_sound = item_sounds.metal_chest_inventory_pickup,
+    drop_sound = item_sounds.metal_chest_inventory_move,
   },
 }
