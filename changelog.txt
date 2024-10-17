@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 17 October 2024
+  Features:
+    - Factorio 2.0 & Space Age compatibility
+    - Added 3x4 machine size option (graphics for this would be appreciated if anyone fancies making some)
+---------------------------------------------------------------------------------------------------
 Version: 2.0.7
 Date: 3 November 2023
   Bugfixes:
