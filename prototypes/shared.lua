@@ -564,6 +564,9 @@ function IC.create_machine_item(tier, colour, localised_name)
       order = "d-a[".. IC.ENTITY_PREFIX .."1]-" .. order,
       place_result = IC.ENTITY_PREFIX .. tier,
       flags = {},
+      inventory_move_sound = item_sounds.mechanical_inventory_move,
+      pick_sound = item_sounds.mechanical_inventory_pickup,
+      drop_sound = item_sounds.mechanical_inventory_move,  
     }
   }
 end
