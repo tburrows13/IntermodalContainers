@@ -10,7 +10,7 @@ data:extend{
     type = "item",
     name = "ic-container",
     icon = IC.P_G_ICONS .. "container/container.png",
-    icon_size = 64, icon_mipmaps = 1,
+    icon_size = 64,
     subgroup = "intermediate-product",
     order = "[first-in-order]",
     stack_size = 10,

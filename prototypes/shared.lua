@@ -80,14 +80,14 @@ IC.OVERSIZED_CONTAINERS = settings.startup["ic-container-oversized-icon"].value
 IC.CONTAINER_PICTURE_SCALE = IC.OVERSIZED_CONTAINERS and 0.8 or 0.5
 
 IC.ICONS = {
-  ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["ARROW_DOWN"] = { icon = IC.P_G_ICONS.."arrow/arrow.png",                      icon_mipmaps = 1, icon_size = 64, scale = 0.4, shift = { 4, 1 } },
-  ["UNLOAD_BG"]  = { icon = IC.P_G_ICONS.."container/unload-background.png",      icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["CORNER_L"]   = { icon = IC.P_G_ICONS.."container/container-corner-left.png",  icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["ARROW_UP"]   = { icon = IC.P_G_ICONS.."arrow/arrow-up.png",                   icon_mipmaps = 1, icon_size = 64, scale = 0.4, shift = { -4, 0} },
-  ["CONTAINER"]  = { icon = IC.P_G_ICONS.."container/container.png",              icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
-  ["TOP_COVER"]  = { icon = IC.P_G_ICONS.."container/container-top.png",          icon_mipmaps = 1, icon_size = 64, scale = 0.5 },
+  ["LOAD_BG"]    = { icon = IC.P_G_ICONS.."container/load-background.png",        icon_size = 64, scale = 0.5 },
+  ["CORNER_R"]   = { icon = IC.P_G_ICONS.."container/container-corner-right.png", icon_size = 64, scale = 0.5 },
+  ["ARROW_DOWN"] = { icon = IC.P_G_ICONS.."arrow/arrow.png",                      icon_size = 64, scale = 0.4, shift = { 4, 1 } },
+  ["UNLOAD_BG"]  = { icon = IC.P_G_ICONS.."container/unload-background.png",      icon_size = 64, scale = 0.5 },
+  ["CORNER_L"]   = { icon = IC.P_G_ICONS.."container/container-corner-left.png",  icon_size = 64, scale = 0.5 },
+  ["ARROW_UP"]   = { icon = IC.P_G_ICONS.."arrow/arrow-up.png",                   icon_size = 64, scale = 0.4, shift = { -4, 0} },
+  ["CONTAINER"]  = { icon = IC.P_G_ICONS.."container/container.png",              icon_size = 64, scale = 0.5 },
+  ["TOP_COVER"]  = { icon = IC.P_G_ICONS.."container/container-top.png",          icon_size = 64, scale = 0.5 },
 }
 
 -- debug logging
@@ -168,8 +168,6 @@ function IC.generate_crates(this_item)
     layer.icon = nil
     layer.size = layer.icon_size
     layer.icon_size = nil
-    layer.mipmap_count = layer.icon_mipmaps
-    layer.icon_mipmaps = nil
     layer.shift = layer.shift or {0, 0}
     layer.shift = util.by_pixel(layer.shift[1] * IC.CONTAINER_PICTURE_SCALE, layer.shift[2] * IC.CONTAINER_PICTURE_SCALE)
     layer.scale = layer.scale * IC.CONTAINER_PICTURE_SCALE
@@ -402,8 +400,8 @@ function IC.create_machine_entity(tier, colour, speed, pollution, energy, drain,
     next_upgrade = upgrade,
     fast_replaceable_group = "crating-machine",
     icons = {
-      { icon = IC.P_G_ICONS .. "mipmaps/crating-icon-base.png", icon_size = IC.ITEM_ICON_SIZE, icon_mipmaps = 4 },
-      { icon = IC.P_G_ICONS .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour, icon_mipmaps = 4 },
+      { icon = IC.P_G_ICONS .. "mipmaps/crating-icon-base.png", icon_size = IC.ITEM_ICON_SIZE},
+      { icon = IC.P_G_ICONS .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour },
     },
     minable = {
       mining_time = 0.5,
@@ -559,8 +557,8 @@ function IC.create_machine_item(tier, colour, localised_name)
       subgroup = "production-machine",
       stack_size = 50,
       icons = {
-        { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-base.png", icon_size = IC.ITEM_ICON_SIZE, icon_mipmaps = 4 },
-        { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour, icon_mipmaps = 4 },
+        { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-base.png", icon_size = IC.ITEM_ICON_SIZE },
+        { icon = IC.P_G_ICONS  .. "mipmaps/crating-icon-mask.png", icon_size = IC.ITEM_ICON_SIZE, tint = colour },
       },
       icon_size = IC.ITEM_ICON_SIZE,
       order = "d-a[".. IC.ENTITY_PREFIX .."1]-" .. order,

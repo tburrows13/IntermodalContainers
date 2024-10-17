@@ -57,7 +57,6 @@ data:extend({
     {
       icon = IC.P_G_ICONS .. "arrow/arrow.png",
       icon_size = 64,
-      icon_mipmaps = 1,
       scale = 0.8,
       shift = {0, 0}
     }
@@ -81,7 +80,6 @@ data:extend({
     {
       icon = IC.P_G_ICONS .. "arrow/arrow-up.png",
       icon_size = 64,
-      icon_mipmaps = 1,
       scale = 0.8,
       shift = {0, 0}
     }
