@@ -1,8 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 11 November 2024
+  Bugfixes:
+    - Fixed item_sounds error on load with 2.0.16
+    - Fixed error on load with mods that don't set icon_size
+---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 30 October 2024
   Bugfixes:
-    - Fixed crash on load with Plutonium Energy mod 
+    - Fixed crash on load with Plutonium Energy mod
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 17 October 2024
