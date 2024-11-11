@@ -1,3 +1,5 @@
+local item_sounds = require("__base__.prototypes.item_sounds")
+
 local IC = require "prototypes.shared"
 
 -- crating machines
