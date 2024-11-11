@@ -158,7 +158,7 @@ function IC.generate_crates(this_item)
   for _, layer in pairs(containeritemlayers) do
     layer.filename = layer.icon
     layer.icon = nil
-    layer.size = layer.icon_size
+    layer.size = layer.icon_size or 64
     layer.icon_size = nil
     layer.shift = layer.shift or {0, 0}
     layer.shift = util.by_pixel(layer.shift[1] * IC.CONTAINER_PICTURE_SCALE, layer.shift[2] * IC.CONTAINER_PICTURE_SCALE)
