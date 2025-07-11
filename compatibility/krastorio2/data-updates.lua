@@ -1,9 +1,10 @@
 if not mods["Krastorio2"] then return end
+local data_util = require("__Krastorio2__.data-util")
 
 local IC = require "prototypes.shared"
 
 -- IC's technology and upgrade planner
-krastorio.technologies.removePrerequisite(IC.TECH_PREFIX.."1", "automation")
+data_util.remove_prerequisite(IC.TECH_PREFIX.."1", "automation")
 data.raw["assembling-machine"][IC.ENTITY_PREFIX.."3"].next_upgrade = IC.ENTITY_PREFIX.."4"
 
 -- Add containerization machines for tier 4&5 of Krastorio2 belts
@@ -15,9 +16,9 @@ intermodal_containers.add_tier(
   ingredients =
   {
     { type = "item", name = IC.ENTITY_PREFIX.."3",  amount =  1 },
-    { type = "item", name = "rare-metals",      amount = 20 },
+    { type = "item", name = "kr-rare-metals",      amount = 20 },
     { type = "item", name = "processing-unit",  amount = 10 },
-    { type = "item", name = "steel-gear-wheel", amount = 20 }
+    { type = "item", name = "kr-steel-gear-wheel", amount = 20 }
   },
   colour = { r=46, g=229, b=92 }, -- green #2EE55C
   speed = 4,
@@ -45,7 +46,7 @@ intermodal_containers.add_tier(
     { type = "item", name = IC.ENTITY_PREFIX.."4",  amount =  1 },
     { type = "item", name = "low-density-structure",amount =  8 },
     { type = "item", name = "processing-unit",      amount = 15 },
-    { type = "item", name = "imersium-gear-wheel",  amount = 20 }
+    { type = "item", name = "kr-imersium-gear-wheel",  amount = 20 }
   },
   colour = { r=180, g=89, b=255 }, -- purple #B459FF
   speed = 6,
@@ -57,7 +58,7 @@ intermodal_containers.add_tier(
     {
       {"production-science-pack", 1},
       {"utility-science-pack", 1},
-      {"advanced-tech-card", 1}
+      {"kr-advanced-tech-card", 1}
     },
     time = 30
   },

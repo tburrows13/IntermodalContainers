@@ -5,16 +5,16 @@ local function add_radioactive_items()
   local IC = "ic-container-"
   for ___, name in pairs({
     -- Vanilla
-    "nuclear-fuel",
+    "nuclear-fuel",  -- TODO check why nuclear-fuel isn't being containerised
     "uranium-235",
     "uranium-238",
     "uranium-fuel-cell",
     "uranium-ore",
-    "used-up-uranium-fuel-cell",
+    "depleted-uranium-fuel-cell",
     -- Plutonium Energy
     "breeder-fuel-cell",
     "plutonium",
-    "used-up-breeder-fuel-cell",
+    "depleted-breeder-fuel-cell",
     -- Schall Uranium Processing
     "uranium-concentrate",
     "uranium-low-enriched"
